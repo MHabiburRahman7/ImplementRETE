@@ -14,16 +14,17 @@ using namespace std;
 
 class ReteGraph
 {
+public:
 	ReteGraph() {};
 
-	Node* temp;
+	static Node* tempNode;
 
 	//Store Nodes
-	vector<int>alphaListIDDictionary;
-	vector<int>betaListIDDictionary;
-	vector<int>termListIDDictionary;
+	static vector<int>alphaListIDDictionary;
+	static vector<int>betaListIDDictionary;
+	static vector<int>termListIDDictionary;
 
-	vector<Node*> NodeList;
+	static vector<Node*> NodeList;
 
 	//FindMatch
 	//vector<int> findMatch(WMSet* temp_wm);
@@ -32,34 +33,37 @@ class ReteGraph
 	//vector<Node*> findMatchUsingBFSNode(WMSet* temp_wm);
 
 	//Add Alpha or Beta
-	int addAlpha(string condition);
-	int addBeta(string condition);
-	int addTerminal(string terminalName);
+	static int addAlpha(string condition);
+	static int addBeta(string condition);
+	static int addTerminal(string terminalName);
 
+	/*
 	AlphaNode addAlphaAndReturn(string condition);
 	BetaNode addBetaAndReturn(string condition);
+	*/
 
 	//Building network
-	int buildCurrentAlphaBeta();
-	int buildCurrentNetNodes();
+	static int buildCurrentAlphaBeta();
+	//static int buildCurrentNetNodes();
 
 	//Difference is only on the parameter used
-	int connectTwoInputNode(AlphaNode& a1, AlphaNode& a2, BetaNode& b1);
-	int connectTwoInputNode(BetaNode& b1, AlphaNode& a2, BetaNode& b2);
-	int connectTwoInputNode(BetaNode& b1, BetaNode& b2, BetaNode& b3);
-	int connectBetaToTerminal(BetaNode& b1, TerminalNode& t1);
+	/*static int connectTwoInputNode(AlphaNode& a1, AlphaNode& a2, BetaNode& b1);
+	static int connectTwoInputNode(BetaNode& b1, AlphaNode& a2, BetaNode& b2);
+	static int connectTwoInputNode(BetaNode& b1, BetaNode& b2, BetaNode& b3);
+	static int connectBetaToTerminal(BetaNode& b1, TerminalNode& t1);
+	*/
 
-	int connectTwoInputNodeNode(Node&, Node&, Node&);
-	int connectBetaToTerminalNode(Node& n1, Node& n2);
+	static int connectTwoInputNodeNode(Node&, Node&, Node&);
+	static int connectBetaToTerminalNode(Node& n1, Node& n2);
 
 	//find function
-	int findAlpha(string dataType);
-	int findBeta(string BCode);
-	int findBetaBasedOnProduct(string product);
-	AlphaNode* findAlphaAndReturnNode(string dataType);
-	AlphaNode* findAlphaAndReturnNode(AlphaNode* tempNode);
-	BetaNode* findBetaBasedOnProductAndReturnNode(string product);
-	BetaNode* findBetaBasedOnProductAndReturnNode(BetaNode* tempNode);
-	TerminalNode* findTerminalAndReturnNode(TerminalNode* tempNode);
+	static int findAlpha(string dataType);
+	static int findBeta(string BCode);
+	//static int findBetaBasedOnProduct(string product);
+	//static AlphaNode* findAlphaAndReturnNode(string dataType);
+	static AlphaNode* findAlphaAndReturnNode(AlphaNode* tempNode);
+	static BetaNode* findBetaBasedOnProductAndReturnNode(string product);
+	static BetaNode* findBetaBasedOnProductAndReturnNode(BetaNode* tempNode);
+	static TerminalNode* findTerminalAndReturnNode(TerminalNode* tempNode);
 };
 

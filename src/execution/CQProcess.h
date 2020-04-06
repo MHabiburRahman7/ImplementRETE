@@ -17,6 +17,8 @@
 #include <set>
 #include "ExecuteScheduler.h"
 
+#include "../rete_net/ReteGraph.h"
+
 //the ResultListener return DerivedEventPtr.
 class CQProcess : public Process{
 	friend class ExecuteScheduler;
@@ -51,6 +53,12 @@ public:
 	vector<Predicate*> getPredicates();
 	void addEventToQueue(EventPtr e, queue<EventPtr>& q);
 	void triggerResult();
+
+	//---------------------------------
+	//Yoboseyeo, Incoming Rete . . .
+	//no, not here
+	//---------------------------------
+	//ReteGraph thisCQRete;
 
 private:
 	vector<string> inputStreamNames;

@@ -381,6 +381,9 @@
     <ClInclude Include="src\rete_net\ReteGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\rete_net\RETE_Process.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\common\Event.cpp">
@@ -627,6 +630,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rete_net\ReteGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rete_net\RETE_Process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

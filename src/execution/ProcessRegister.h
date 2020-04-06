@@ -7,6 +7,8 @@
 #include "../execution/CEPProcess.h"
 #include <set>
 
+#include "../rete_net/ReteGraph.h"
+
 /*
 To store the objects of Processing, including Event Filter, 
 Event Capture, CQ and CEP. So it has functions to add, get and delete 
@@ -27,6 +29,10 @@ public:
 	static vector<Process*>& getAllCQ();
 
 	static void registerEventFilter(EventProcess* ep);
+
+	//----------------------------------------------------
+	//Here comes Rete again . . .
+	//static ReteGraph* rete_cq;
 
 private:
 	static EventProcess *eventProcess;

@@ -15,7 +15,8 @@
 #include "../execution/ProcessRegister.h"
 #include "../spec/SpecRegister.h"
 
-#include "../rete_net/ReteGraph.h"
+//#include "../rete_net/ReteGraph.h"
+#include "../rete_net/RETE_Process.h"
 
 using namespace std;
 
@@ -58,7 +59,7 @@ public:
 		SpecRegister::register_event_capture_rule(spec->getOutputStream(), ruleSpec);
 	}
 
-	static void registerCQ(string ruleSpec) {
+	static void registerCQ(string ruleSpec) {		
 		list<string> specLines;
 		specPreprocess(ruleSpec, specLines);
 		CQSpec* cqSpec = CQSpecParser::parseOneCQSpec(specLines);
@@ -67,8 +68,14 @@ public:
 		//store rule specification
 		SpecRegister::register_cq_rule(cqSpec->getOutputStreamName(), ruleSpec);
 
-		//RETE have to come in
-		ReteGraph::
+		//RETE have to come in here . . .
+		//which RETE? ._.
+		//ReteGraph *temp = ProcessRegister::rete_cq;
+		
+		//RETE part . . .
+		std::list<std::string>::iterator it = specLines.begin();
+		RETE_Process::addCQ(*it);
+
 	}
 
 	static void registerCEP(string ruleSpec) {

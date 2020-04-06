@@ -211,6 +211,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\rete_net\RETE_Process.h" />
     <ClInclude Include="src\rete_net\ReteGraph.h" />
     <ClInclude Include="src\rete_net\AlphaNode.h" />
     <ClInclude Include="src\rete_net\BetaNode.h" />
@@ -310,6 +311,7 @@
     <ClInclude Include="src\rete_net\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\rete_net\RETE_Process.cpp" />
     <ClCompile Include="src\rete_net\ReteGraph.cpp" />
     <ClCompile Include="src\rete_net\AlphaNode.cpp" />
     <ClCompile Include="src\rete_net\BetaNode.cpp" />

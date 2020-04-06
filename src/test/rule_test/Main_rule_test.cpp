@@ -5,9 +5,16 @@
 #include "../../execution/ExecuteScheduler.h"
 #include "RuleSpec.h"
 
+#include "../../rete_net/ReteGraph.h"
+
 using namespace std;
 
 int main() {
+
+	//Global RETE
+	//ReteGraph cqRete;
+
+
 	RuleRegisterUtils::registerEventFilter(event_filter_rule);
 	RuleRegisterUtils::registerEventCapture(event_filter_rule2);
 	RuleRegisterUtils::registerEventCapture(ec_enemy_target);

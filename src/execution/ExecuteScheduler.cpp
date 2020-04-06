@@ -64,10 +64,10 @@ void ExecuteScheduler::runProcessQueue(){
 			int itt = 0;
 			for (auto iter = ProcessRegister::processSet.begin(); iter != ProcessRegister::processSet.end(); iter++){
 				
-				if (dynamic_cast<CQProcess*>(*iter)) {
-					//itt++;
-					r.add_CQProcess(dynamic_cast<CQProcess*>(*iter));
-				}
+				//if (dynamic_cast<CQProcess*>(*iter)) {
+				//	//itt++;
+				//	r.add_CQProcess(dynamic_cast<CQProcess*>(*iter));
+				//}
 
 				//change here?
 				(*iter)->process(100);

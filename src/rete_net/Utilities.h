@@ -17,7 +17,7 @@ public:
 	Utilities();
 
 	//tokenizing
-	vector<pair<string, string>> tokenize(string temp);
+	static vector<pair<string, string>> tokenize(string temp);
 
 	static string ToUpper(string ori);
 	static string ToLower(string ori);
