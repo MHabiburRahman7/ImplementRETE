@@ -1,14 +1,17 @@
 #pragma once
 #include "ReteGraph.h"
 #include "Utilities.h"
+#include "../execution/Process.h"
 #include <iostream>
 
 using namespace std;
 
-class RETE_Process
+class RETE_Process : public Process
 {
 public:
 
+	static void resetAndClearGraph();
+	bool process(int timeSlice)override;
 	static void addCQ(string input) {
 		string finalTerm;
 

@@ -60,19 +60,24 @@ public:
 	}
 
 	static void registerCQ(string ruleSpec) {		
-		list<string> specLines;
-		specPreprocess(ruleSpec, specLines);
-		CQSpec* cqSpec = CQSpecParser::parseOneCQSpec(specLines);
-		CQProcess* cq = cqSpec->instance();
-		ProcessRegister::addProcess(cq);
-		//store rule specification
-		SpecRegister::register_cq_rule(cqSpec->getOutputStreamName(), ruleSpec);
+		//list<string> specLines;
+		//specPreprocess(ruleSpec, specLines);
+		//CQSpec* cqSpec = CQSpecParser::parseOneCQSpec(specLines);
+		//CQProcess* cq = cqSpec->instance();
+		//ProcessRegister::addProcess(cq);
+		////store rule specification
+		//SpecRegister::register_cq_rule(cqSpec->getOutputStreamName(), ruleSpec);
 
 		//RETE have to come in here . . .
 		//which RETE? ._.
 		//ReteGraph *temp = ProcessRegister::rete_cq;
 		
 		//RETE part . . .
+
+		RETE_Process::resetAndClearGraph();
+
+		list<string> specLines;
+		specPreprocess(ruleSpec, specLines);
 		std::list<std::string>::iterator it = specLines.begin();
 		RETE_Process::addCQ(*it);
 

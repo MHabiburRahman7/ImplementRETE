@@ -20,16 +20,16 @@ public:
 	static Node* tempNode;
 
 	//Store Nodes
-	static vector<int>alphaListIDDictionary;
-	static vector<int>betaListIDDictionary;
-	static vector<int>termListIDDictionary;
+	static vector<int> alphaListIDDictionary;
+	static vector<int> betaListIDDictionary;
+	static vector<int> termListIDDictionary;
 
 	static vector<Node*> NodeList;
 
 	//FindMatch
 	//vector<int> findMatch(WMSet* temp_wm);
 	//void testBFS(WMSet* temp_wm);
-	//vector<int> findMatchUsingBFS(WMSet* temp_wm);
+	//vector<int> findMatchUsingBFS(WMSet* temp_wm);ReteGraph::
 	//vector<Node*> findMatchUsingBFSNode(WMSet* temp_wm);
 
 	//Add Alpha or Beta
@@ -44,7 +44,7 @@ public:
 
 	//Building network
 	static int buildCurrentAlphaBeta();
-	//static int buildCurrentNetNodes();
+	static void resetAndClearNet();
 
 	//Difference is only on the parameter used
 	/*static int connectTwoInputNode(AlphaNode& a1, AlphaNode& a2, BetaNode& b1);
@@ -53,7 +53,7 @@ public:
 	static int connectBetaToTerminal(BetaNode& b1, TerminalNode& t1);
 	*/
 
-	static int connectTwoInputNodeNode(Node&, Node&, Node&);
+	static int connectTwoInputNodeNode(Node& n1, Node& n2, Node& n3);
 	static int connectBetaToTerminalNode(Node& n1, Node& n2);
 
 	//find function

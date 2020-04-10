@@ -34,6 +34,10 @@ public:
 	//Here comes Rete again . . .
 	//static ReteGraph* rete_cq;
 
+	// Well well, start from here man . . .
+	// Remember only single RETE for CQ and single RETE for CEP
+	// No more, no less 
+
 private:
 	static EventProcess *eventProcess;
 

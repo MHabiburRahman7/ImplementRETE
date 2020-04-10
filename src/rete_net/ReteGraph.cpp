@@ -1,5 +1,14 @@
 #include "ReteGraph.h"
 
+Node* ReteGraph::tempNode;
+
+vector<int> ReteGraph::alphaListIDDictionary;
+vector<int> ReteGraph::betaListIDDictionary;
+vector<int> ReteGraph::termListIDDictionary;
+
+vector<Node*> ReteGraph::NodeList;
+
+
 int ReteGraph::addAlpha(string condition)
 {
 	if (condition.back() == ' ') {
@@ -7,8 +16,8 @@ int ReteGraph::addAlpha(string condition)
 	}
 	
 	//duplicate check
-	for (int i = 0; i < alphaListIDDictionary.size(); i++) {
-		if (NodeList[alphaListIDDictionary[i]]->justCondition == condition)
+	for (int i = 0; i < ReteGraph::alphaListIDDictionary.size(); i++) {
+		if (ReteGraph::NodeList[ReteGraph::alphaListIDDictionary[i]]->justCondition == condition)
 			return 1;
 	}
 
@@ -33,7 +42,7 @@ int ReteGraph::addBeta(string condition)
 			return 1;
 	}
 
-	//Try to use OOP
+	////Try to use OOP
 	int masterNodeID = NodeList.size();
 	tempNode = new BetaNode(masterNodeID, condition);
 	NodeList.push_back(tempNode);
@@ -136,6 +145,17 @@ int ReteGraph::buildCurrentAlphaBeta()
 	return 0;
 }
 
+void ReteGraph::resetAndClearNet()
+{
+	for (int i = 0; i < alphaListIDDictionary.size(); i++) {
+		static_cast<AlphaNode*>(NodeList[alphaListIDDictionary[i]])->ResetNode();
+	}
+	//beta nodes
+	for (int i = 0; i < betaListIDDictionary.size(); i++) {
+		static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->ResetNode();
+	}
+}
+
 int ReteGraph::connectTwoInputNodeNode(Node& n1, Node& n2, Node& n3)
 {
 	if (static_cast<BetaNode*>(&n3)->leftSourceType != "" ||
@@ -215,7 +235,8 @@ int ReteGraph::findBeta(string BCode)
 
 AlphaNode* ReteGraph::findAlphaAndReturnNode(AlphaNode* tempNode)
 {
-	return dynamic_cast<AlphaNode*>(NodeList[static_cast<Node*>(tempNode)->SuperNodeID]);
+	//return dynamic_cast<AlphaNode*>(NodeList[static_cast<Node*>(tempNode)->SuperNodeID]);
+	return nullptr;
 }
 
 BetaNode* ReteGraph::findBetaBasedOnProductAndReturnNode(string product)
@@ -231,11 +252,13 @@ BetaNode* ReteGraph::findBetaBasedOnProductAndReturnNode(string product)
 BetaNode* ReteGraph::findBetaBasedOnProductAndReturnNode(BetaNode* tempNode)
 {
 	return dynamic_cast<BetaNode*>(NodeList[static_cast<Node*>(tempNode)->SuperNodeID]);
+	//return nullptr;
 }
 
 TerminalNode* ReteGraph::findTerminalAndReturnNode(TerminalNode* tempNode)
 {
 	return dynamic_cast<TerminalNode*>(NodeList[static_cast<Node*>(tempNode)->SuperNodeID]);
+	//return nullptr;
 }
 
 
