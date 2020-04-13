@@ -15,15 +15,20 @@ using namespace std;
 class ReteGraph
 {
 public:
-	ReteGraph() {};
+	ReteGraph() {
+		//IsCreated = false;
+	};
 
 	static Node* tempNode;
+	//Maybe i need this
+	//static bool IsCreated;
 
 	//Store Nodes
 	static vector<int> alphaListIDDictionary;
 	static vector<int> betaListIDDictionary;
 	static vector<int> termListIDDictionary;
 
+	// Next time, change this into unordered_map for faster development :p
 	static vector<Node*> NodeList;
 
 	//FindMatch
@@ -60,7 +65,7 @@ public:
 	static int findAlpha(string dataType);
 	static int findBeta(string BCode);
 	//static int findBetaBasedOnProduct(string product);
-	//static AlphaNode* findAlphaAndReturnNode(string dataType);
+	static AlphaNode* findAlphaAndReturnNode(string dataType);
 	static AlphaNode* findAlphaAndReturnNode(AlphaNode* tempNode);
 	static BetaNode* findBetaBasedOnProductAndReturnNode(string product);
 	static BetaNode* findBetaBasedOnProductAndReturnNode(BetaNode* tempNode);

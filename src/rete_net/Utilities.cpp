@@ -97,6 +97,9 @@ vector<pair<string, string>> Utilities::tokenize(string temp)
 			|| (strcmp(ToUpper(token).c_str(), "OR") == 0)) {
 			conditionMade.push_back({ "condition", ToUpper(token).c_str() });
 		}
+		/*if ((strcmp(ToUpper(token).c_str(), "&") == 0)) {
+			conditionMade.push_back({ "condition", "AND" });
+		}*/
 
 		//token = strtok(NULL, " ");
 		itt++;

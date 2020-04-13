@@ -13,7 +13,7 @@
 class rete_test
 {
 public:
-	rete_test() {};
+	rete_test() { vector<queue<EventPtr>*> inputQueueSetOfDownstreamProcessUnit; };
 
 	vector<EventPtr> event_vec;
 	vector<CQProcess*> cqProc_vec;

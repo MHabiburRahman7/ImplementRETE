@@ -1,10 +1,10 @@
 #include "ReteGraph.h"
 
-Node* ReteGraph::tempNode;
-
+//Node* ReteGraph::tempNode;
+//
 vector<int> ReteGraph::alphaListIDDictionary;
-vector<int> ReteGraph::betaListIDDictionary;
-vector<int> ReteGraph::termListIDDictionary;
+//vector<int> ReteGraph::betaListIDDictionary;
+//vector<int> ReteGraph::termListIDDictionary;
 
 vector<Node*> ReteGraph::NodeList;
 
@@ -16,7 +16,7 @@ int ReteGraph::addAlpha(string condition)
 	}
 	
 	//duplicate check
-	for (int i = 0; i < ReteGraph::alphaListIDDictionary.size(); i++) {
+	for (int i = 0; i < alphaListIDDictionary.size(); i++) {
 		if (ReteGraph::NodeList[ReteGraph::alphaListIDDictionary[i]]->justCondition == condition)
 			return 1;
 	}
@@ -77,30 +77,18 @@ int ReteGraph::buildCurrentAlphaBeta()
 	for (int i = 0; i < betaListIDDictionary.size(); i++) {
 		Node* alpha1 = nullptr, * alpha2 = nullptr;
 		Node* beta1 = nullptr, * beta2 = nullptr;
-		alpha1 = findAlphaAndReturnNode(static_cast<AlphaNode*>(
-			static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->leftConnectionInNode)
-		);
-		alpha2 = findAlphaAndReturnNode(static_cast<AlphaNode*>(
-			static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->rightConnectionInNode)
-		);
+		alpha1 = findAlphaAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->leftSource);
+		alpha2 = findAlphaAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->rightSource);
 
 		//Will be depreciated soon
 		if (alpha1 == nullptr && alpha2 == nullptr) { // both beta
-			
-			beta1 = static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->leftConnectionInNode;
-			beta2 = static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->rightConnectionInNode;
-													  
-			//beta1 = findBetaBasedOnProductAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->leftConnectionInNode);
-			//beta2 = findBetaBasedOnProductAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->rightSource);
+			beta1 = findBetaBasedOnProductAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->leftSource);
+			beta2 = findBetaBasedOnProductAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->rightSource);
 		}
 		else if (alpha1 == nullptr || alpha2 == nullptr) { // one of them is beta
-			
-			beta1 = static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->leftConnectionInNode;
-
-			//beta1 = findBetaBasedOnProductAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->leftSource);
+			beta1 = findBetaBasedOnProductAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->leftSource);
 			if (beta1 == nullptr)
-				beta1 = static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->rightConnectionInNode;
-				//beta1 = findBetaBasedOnProductAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->rightSource);
+				beta1 = findBetaBasedOnProductAndReturnNode(static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->rightSource);
 		}
 
 		if (alpha1 != nullptr && alpha2 != nullptr) // alpha 1 and 2 is alpha node
@@ -142,6 +130,8 @@ int ReteGraph::buildCurrentAlphaBeta()
 		}
 	}
 
+	//IsCreated = true;
+
 	return 0;
 }
 
@@ -154,6 +144,7 @@ void ReteGraph::resetAndClearNet()
 	for (int i = 0; i < betaListIDDictionary.size(); i++) {
 		static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->ResetNode();
 	}
+	//IsCreated = false;
 }
 
 int ReteGraph::connectTwoInputNodeNode(Node& n1, Node& n2, Node& n3)
@@ -231,6 +222,16 @@ int ReteGraph::findBeta(string BCode)
 	num = atoi(BCode.substr(1, len).c_str());
 
 	return num;
+}
+
+AlphaNode* ReteGraph::findAlphaAndReturnNode(string dataType)
+{
+	for (int i = 0; i < alphaListIDDictionary.size(); i++) {
+		if (NodeList[alphaListIDDictionary[i]]->justCondition ==
+			dataType)
+			return static_cast<AlphaNode*>(NodeList[alphaListIDDictionary[i]]);
+	}
+	return nullptr;
 }
 
 AlphaNode* ReteGraph::findAlphaAndReturnNode(AlphaNode* tempNode)

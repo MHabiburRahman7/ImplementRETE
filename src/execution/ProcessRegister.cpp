@@ -14,14 +14,24 @@ set<CEPProcess*> ProcessRegister::cepSet;
 vector<Process*> ProcessRegister::eventCaptureVec;
 vector<Process*> ProcessRegister::cqVec;
 
+Process* ProcessRegister::rete_cq;
+
 void ProcessRegister::addProcess(Process* pro) {
 	try {
  		std::lock_guard<std::recursive_mutex> lg(mutexOfProcessRegister);//mutex lock
 		if (processSet.find(pro) != processSet.end()) 
 			return;//existing
+		
+		//if (dynamic_cast<RETE_Process*>(pro) && !dynamic_cast<RETE_Process*>(pro)->isExist) {
+		//	rete_cq = pro;
+		//	processSet.insert(pro);
+		//	return;
+		//	//eventCaptureVec.push_back(pro);
+		//}
+		
 		processSet.insert(pro);
 
-		processMap[pro->getOutputStreamName()] = pro;
+		//processMap[pro->getOutputStreamName()] = pro;
 		if (dynamic_cast<CEPProcess*>(pro)) {
 			cepSet.insert(dynamic_cast<CEPProcess*>(pro));
 		}

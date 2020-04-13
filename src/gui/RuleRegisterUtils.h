@@ -56,16 +56,16 @@ public:
 		EventCapture* ec = spec->instance();
 		ProcessRegister::addProcess(ec);
 		//store rule specification
-		SpecRegister::register_event_capture_rule(spec->getOutputStream(), ruleSpec);
+		//SpecRegister::register_event_capture_rule(spec->getOutputStream(), ruleSpec);
 	}
 
 	static void registerCQ(string ruleSpec) {		
-		//list<string> specLines;
-		//specPreprocess(ruleSpec, specLines);
-		//CQSpec* cqSpec = CQSpecParser::parseOneCQSpec(specLines);
-		//CQProcess* cq = cqSpec->instance();
-		//ProcessRegister::addProcess(cq);
-		////store rule specification
+		list<string> specLines;
+		specPreprocess(ruleSpec, specLines);
+		CQSpec* cqSpec = CQSpecParser::parseOneCQSpec(specLines);
+		CQProcess* cq = cqSpec->instance();
+		ProcessRegister::addProcess(cq);
+		//store rule specification
 		//SpecRegister::register_cq_rule(cqSpec->getOutputStreamName(), ruleSpec);
 
 		//RETE have to come in here . . .
@@ -76,11 +76,16 @@ public:
 
 		RETE_Process::resetAndClearGraph();
 
-		list<string> specLines;
-		specPreprocess(ruleSpec, specLines);
-		std::list<std::string>::iterator it = specLines.begin();
-		RETE_Process::addCQ(*it);
+		//list<string> specLines;
+		//specPreprocess(ruleSpec, specLines);
+		//std::list<std::string>::iterator it = specLines.begin();
+		
+		//RETE_Process* rete = new RETE_Process();
+		//rete->addCQ(*it);
+		RETE_Process::addCQ(specLines);
+		//ProcessRegister::addProcess(rete);
 
+		RETE_Process::buildGraph();
 	}
 
 	static void registerCEP(string ruleSpec) {

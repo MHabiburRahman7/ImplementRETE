@@ -54,8 +54,6 @@ bool CQProcess::process(int timeSlice){
 		while (!inputQueue->empty() && timeSlice_i > 0) {//current input queue is not empty.
 			EventPtr originalFrontEvent = inputQueue->front();
 
-			
-
 			if (predicates[i]->check(originalFrontEvent)) {//check the query condition.
 				if (windowList.size() == 0 || (inputQueues.size() == 1 && operatorNames.size() == 0)) {
 					EventPtr currEvent(originalFrontEvent->clone());//clone the event

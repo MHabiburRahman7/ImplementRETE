@@ -2,6 +2,7 @@
 #include "ReteGraph.h"
 #include "Utilities.h"
 #include "../execution/Process.h"
+#include "../common/Event.h"
 #include <iostream>
 
 using namespace std;
@@ -10,64 +11,21 @@ class RETE_Process : public Process
 {
 public:
 
+	RETE_Process();
+
+	static ReteGraph theGraph, cqRete, cepRete;
+
+	static bool isExist;
+
 	static void resetAndClearGraph();
+	static void buildGraph();
 	bool process(int timeSlice)override;
-	static void addCQ(string input) {
-		string finalTerm;
+	static void addCQ(list<string> input);
 
-		vector<pair<string, string>> made;
-		made = Utilities::tokenize(input);
-
-		char* token;
-		char* str = (char*)malloc(100);
-
-		//This belong to beta and terminal
-		if (made.size() == 2) {
-			for (int i = 0; i < made.size(); i++) {
-				//beta node
-				if (i == 0) {
-					finalTerm += made[i].second;
-					finalTerm += " then ";
-				}
-				else {
-					finalTerm += made[i].second;
-				}
-			}
-			
-			theGraph.addTerminal(finalTerm);
-
-			int a;
-		}
-		//This belong to alpha-beta or beta-beta
-		else if (made.size() > 2) {
-			for (int i = 0; i < made.size(); i++) {
-
-				if (i == 3) {
-					finalTerm += "then ";
-				}
-
-				if (made[i].first == "Alpha") {
-					//if alpha is exist
-
-					//if alpha is not exist
-					theGraph.addAlpha(made[i].second);
-
-					finalTerm += made[i].second;
-					finalTerm += " ";
-				}
-				else {
-					finalTerm += made[i].second;
-					finalTerm += " ";
-				}
-				token = strtok(str, " ");
-			}
-			
-			theGraph.addBeta(finalTerm);
-		}
-	};
-
-	static ReteGraph theGraph;
-
-	
+private:
+	//the input queue of other processing units.
+	vector<queue<EventPtr>*> inputQueueSetOfDownstreamProcessUnit;
+	//the output names of process that connects to this process unit.
+	vector<string> outputNameSetOfDownstreamProcessUnit;
 };
 

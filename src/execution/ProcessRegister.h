@@ -8,6 +8,7 @@
 #include <set>
 
 #include "../rete_net/ReteGraph.h"
+#include "../rete_net/RETE_Process.h"
 
 /*
 To store the objects of Processing, including Event Filter, 
@@ -30,6 +31,8 @@ public:
 
 	static void registerEventFilter(EventProcess* ep);
 
+	//static void addProcessReteCQ();
+
 	//----------------------------------------------------
 	//Here comes Rete again . . .
 	//static ReteGraph* rete_cq;
@@ -47,6 +50,8 @@ private:
 	static vector<Process*> eventCaptureVec;
 	static vector<Process*> cqVec;
 	static set<CEPProcess*> cepSet;
+
+	static Process* rete_cq;
 
 public:
 	static std::recursive_mutex mutexOfProcessRegister;//mutex lock among threads

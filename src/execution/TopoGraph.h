@@ -7,6 +7,8 @@
 #include "../execution/CEPProcess.h"
 #include <set>
 
+#include "../rete_net/RETE_Process.h"
+
 /*
 This class is to build topo computation graph for processing units, 
 including Event Filtering, Event Capture, CQ and CEP. 

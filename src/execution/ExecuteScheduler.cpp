@@ -62,6 +62,7 @@ void ExecuteScheduler::runProcessQueue(){
 
 			rete_test r;//---------------------------------------------------------------------------------------------------
 			int itt = 0;
+			//for event capture and event filter
 			for (auto iter = ProcessRegister::processSet.begin(); iter != ProcessRegister::processSet.end(); iter++){
 				
 				//if (dynamic_cast<CQProcess*>(*iter)) {
@@ -72,6 +73,8 @@ void ExecuteScheduler::runProcessQueue(){
 				//change here?
 				(*iter)->process(100);
 			}
+			//for CQ and CEP because it require RETE ._.
+
 		}catch (std::logic_error& e) {
 			std::cout << "[exception caught]\n";
 		}
