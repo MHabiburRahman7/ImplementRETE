@@ -5,56 +5,79 @@
 #include "Utilities.h"
 
 #include <string>
+#include <queue>
+#include "../execution/EventProcess.h"
 
 class BetaNode : public Node
 {
 public:
-	//Connected Pairs (I am not sure with this)
-	Node* leftConnectionInNode, * rightConnectionInNode, * terminalConnectionInNode;
-	vector<Node*> listOfBetaPairInNode;
+	//vector<pair<int, string>> testRes;
 
-	vector<pair<int, string>> testRes;
-
-	int id;
 	BetaNode();
 	BetaNode(int id, string condition);
-	string thisCondition; //AND OR
-
-	int BaseNodeID;
-	string tempComingCondition;
-
-	string leftSource;
-	string rightSource;
-	string thisProduct; //Then expression or RHS
-	string getType();
-
-	string leftSourceType, rightSourceType;
+	
+	int BaseNodeID; // unused
+	string tempComingCondition; // unused
 
 	//Connected to beta and terminal what
 	//BetaNode* betaPair;
-	TerminalNode* terminalPair;
-	vector<BetaNode*> listOfBetaPair;
+	//vector<Node*> listOfBetaPair;
 
-	bool leftSourceBool = false, rightSourceBool = false;
-
-	int getID();
+	//bool leftSourceBool = false, rightSourceBool = false;
+	
 	//int testToken();
 	//If both are alpha nodes
-	int testBetaNode(vector<pair<int, int>> WME, vector<pair<int, int>> WME1);
+	//int testBetaNode(vector<pair<int, int>> WME, vector<pair<int, int>> WME1);
 	//If one of them is beta
-	int testBetaNode(vector<pair<int, string>> WME, vector<pair<int, int>> WME1);
+	//int testBetaNode(vector<pair<int, string>> WME, vector<pair<int, int>> WME1);
 	//if both are beta nodes
-	int testBetaNode(vector<pair<int, string>> WME, vector<pair<int, string>> WME1);
-	//Break into pieces
+	//int testBetaNode(vector<pair<int, string>> WME, vector<pair<int, string>> WME1);
+	//Break into piece
 	//int testAndCondition()??
 
 	//connecting beta & terminal
-	int addBetaPair(BetaNode* pair);
-	int checkBeta(BetaNode* pair);
-	int addBetaPairInNode(BetaNode* pair);
+	int addBetaPair(Node* pair);
+	int checkBeta(Node* pair);
 
 	//Init function
 	int ClearConnection();
 	int ResetNode();
+	int ClearResult();
+
+	//getSet Function
+	int getID();
+	string getProduct();
+	string getType();
+	Node* getLeftConnNode();
+	Node* getRightConnNode();
+	string getLeftConnName();
+	string getRightConnName();
+	queue<EventPtr>* getResult();
+	Node* getSinglePair(int i);
+	vector<Node*> getAllPairs();
+
+	int setLeftConnection(Node* node);
+	int setRightConnection(Node* node);
+
+	int processBetaNode(int timeSlice);
+
+	bool isEmptyResult();
+	
+private:
+	int id;
+	string thisCondition; //AND OR
+	//string leftSource;
+	//string rightSource;
+	string thisProduct; //Then expression or RHS
+
+	string leftSourceType, rightSourceType;
+
+	pair<string, Node*> leftSourcePair, rightSourcePair, termPair;
+
+	queue<EventPtr>* EventResult = new queue<EventPtr>;
+	TerminalNode* terminalPair;
+
+	//Connected Pairs (I am not sure with this)
+	vector<Node*> listOfBetaPairInNode;
 };
 

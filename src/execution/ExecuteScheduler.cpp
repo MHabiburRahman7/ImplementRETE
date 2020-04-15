@@ -3,7 +3,7 @@
 #include <thread>
 #include "../cqindex/ProcessRegisterForCQIndex.h"
 
-#include "../rete_net/rete_test.h"
+//#include "../rete_net/rete_test.h"
 
 
 priority_queue<Process_TriggerTime*, vector<Process_TriggerTime*>,cmp > ExecuteScheduler::cq_pq;
@@ -38,6 +38,12 @@ void ExecuteScheduler::buildGraph() {
 		TopoGraph::addProcessUnitToGraph(p);
 	}
 
+	//WMSet::createInputQueue({ "targetData" });
+	NewReteGraph::createWMSet({ "targetData" });
+	TopoGraph::addRETEProcessUnitToGraph();
+
+	NewReteGraph::buildNetNode();
+
 	buildTriggerTimePriorityQueue();
 }
 
@@ -60,9 +66,9 @@ void ExecuteScheduler::runProcessQueue(){
 		try {
 			std::lock_guard<std::recursive_mutex> lg(ProcessRegister::mutexOfProcessRegister);//mutex lock
 
-			rete_test r;//---------------------------------------------------------------------------------------------------
+			//rete_test r;//---------------------------------------------------------------------------------------------------
 			int itt = 0;
-			//for event capture and event filter
+			//event filter
 			for (auto iter = ProcessRegister::processSet.begin(); iter != ProcessRegister::processSet.end(); iter++){
 				
 				//if (dynamic_cast<CQProcess*>(*iter)) {
@@ -73,7 +79,11 @@ void ExecuteScheduler::runProcessQueue(){
 				//change here?
 				(*iter)->process(100);
 			}
-			//for CQ and CEP because it require RETE ._.
+
+			//for Event Capture CQ and CEP because it require RETE ._.
+			//NewReteGraph::printWMSet();
+			NewReteGraph::processRete(100);
+
 
 		}catch (std::logic_error& e) {
 			std::cout << "[exception caught]\n";

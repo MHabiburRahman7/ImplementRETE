@@ -5,40 +5,26 @@
 #include <string>
 #include <cstdlib>
 
+#include "../execution/EventProcess.h"
+
 class AlphaNode : public Node
 {
 public:
-	//Connected Node (I am not sure with this)
-	vector<Node*> listOfBetaPairsInNode;
-
 	//Test Result
-	vector<pair<int, int>> testRes;
-
-	//connect to next beta Node
-	//BetaNode* betaPair;
-	vector<BetaNode*> listOfBetaPairs;
+	//vector<pair<int, int>> testRes;
 
 	//Starter kit
-	int id;
 	int getID();
 	string getType();
 	AlphaNode();
 	AlphaNode(int id, string condition);
-	string getAlphaDataType();
-
-	//Condition
-	string thisDataType;
-	string thisCondition;
-	string thisVarLimit;
-
-	int BaseNodeID;
-	string tempComingCondition;
+	
+	int BaseNodeID; // unused
+	string tempComingCondition; //unused
 
 	//Lets connect it
-	int checkExistPair(BetaNode* pairs);
-	int addBetaPair(BetaNode* pair);
-
-	int addBetaPairInNode(BetaNode* pair);
+	int checkExistPair(Node* pairs);
+	int addBetaPair(Node* pair);
 
 	//Test
 	void testAlphaAndSaveHere(vector<pair<int, int>> test_cases);
@@ -48,5 +34,29 @@ public:
 
 	//Initialization
 	int ResetNode();
+	int ClearResults();
+
+	void testAlphaAndSaveHere(queue<EventPtr>* input, int TimeSlice);
+
+	bool isEmptyResult();
+
+	//get/set function
+	string getAlphaDataType();
+	string getCondition();
+	string getVarLimit();
+	Node* getSinglePair(int i);
+	vector<Node*> getAllPairs();
+
+private:
+	int id;
+	queue<EventPtr>* EventResult = new queue<EventPtr>;
+
+	//Condition
+	string thisDataType;
+	string thisCondition;
+	string thisVarLimit;
+
+	//Connected Node (I am not sure with this)
+	vector<Node*> listOfBetaPairsInNode;
 };
 

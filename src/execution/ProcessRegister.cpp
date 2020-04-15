@@ -14,7 +14,8 @@ set<CEPProcess*> ProcessRegister::cepSet;
 vector<Process*> ProcessRegister::eventCaptureVec;
 vector<Process*> ProcessRegister::cqVec;
 
-Process* ProcessRegister::rete_cq;
+vector<Process*> ProcessRegister::cqRete;
+//Process* ProcessRegister::rete_cq;
 
 void ProcessRegister::addProcess(Process* pro) {
 	try {
@@ -41,6 +42,12 @@ void ProcessRegister::addProcess(Process* pro) {
 		else if (dynamic_cast<EventCapture*>(pro)) {
 			eventCaptureVec.push_back(pro);
 		}
+
+		//Special for RETE --------------------------------------------
+		else if (dynamic_cast<RETE_Process*>(pro)) {
+			cqRete.push_back(pro);
+		}
+
 	}
 	catch (runtime_error e) {
 		string msg = e.what();

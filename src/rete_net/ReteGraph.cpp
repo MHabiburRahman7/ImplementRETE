@@ -1,13 +1,28 @@
 #include "ReteGraph.h"
 
-//Node* ReteGraph::tempNode;
-//
+Node* ReteGraph::tempNode;
+
 vector<int> ReteGraph::alphaListIDDictionary;
-//vector<int> ReteGraph::betaListIDDictionary;
-//vector<int> ReteGraph::termListIDDictionary;
+vector<int> ReteGraph::betaListIDDictionary;
+vector<int> ReteGraph::termListIDDictionary;
 
 vector<Node*> ReteGraph::NodeList;
 
+
+void ReteGraph::addFullCondition(list<string> fullCondition)
+{
+	//pharser for single condition
+
+
+	//pharser class should be here
+	//This will work for temporary 2 condition, 1 output
+	
+	
+	string temp, finalTerm;
+	vector<pair<string, string>> made;
+
+	//made = Utilities::tokenize(fullCondition.begin());
+}
 
 int ReteGraph::addAlpha(string condition)
 {
@@ -16,7 +31,7 @@ int ReteGraph::addAlpha(string condition)
 	}
 	
 	//duplicate check
-	for (int i = 0; i < alphaListIDDictionary.size(); i++) {
+	for (int i = 0; i < ReteGraph::alphaListIDDictionary.size(); i++) {
 		if (ReteGraph::NodeList[ReteGraph::alphaListIDDictionary[i]]->justCondition == condition)
 			return 1;
 	}
@@ -197,7 +212,6 @@ int ReteGraph::connectTwoInputNodeNode(Node& n1, Node& n2, Node& n3)
 int ReteGraph::connectBetaToTerminalNode(Node& n1, Node& n2)
 {
 	static_cast<BetaNode*>(&n1)->terminalConnectionInNode = &n2;
-	//static_cast<BetaNode*>(&n1)->addBetaPairInNode(n2);
 
 	static_cast<TerminalNode*>(&n2)->prevBetaConnection = &n1;
 
@@ -236,8 +250,8 @@ AlphaNode* ReteGraph::findAlphaAndReturnNode(string dataType)
 
 AlphaNode* ReteGraph::findAlphaAndReturnNode(AlphaNode* tempNode)
 {
-	//return dynamic_cast<AlphaNode*>(NodeList[static_cast<Node*>(tempNode)->SuperNodeID]);
-	return nullptr;
+	return dynamic_cast<AlphaNode*>(NodeList[static_cast<Node*>(tempNode)->SuperNodeID]);
+	//return nullptr;
 }
 
 BetaNode* ReteGraph::findBetaBasedOnProductAndReturnNode(string product)

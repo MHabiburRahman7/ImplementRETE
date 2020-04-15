@@ -17,6 +17,7 @@
 
 //#include "../rete_net/ReteGraph.h"
 #include "../rete_net/RETE_Process.h"
+#include "../rete_net/NewReteGraph.h"
 
 using namespace std;
 
@@ -57,6 +58,9 @@ public:
 		ProcessRegister::addProcess(ec);
 		//store rule specification
 		//SpecRegister::register_event_capture_rule(spec->getOutputStream(), ruleSpec);
+
+		//NewReteGraph::parseCondition(specLines);
+		NewReteGraph::parseConditionOriginal(specLines);
 	}
 
 	static void registerCQ(string ruleSpec) {		
@@ -72,20 +76,26 @@ public:
 		//which RETE? ._.
 		//ReteGraph *temp = ProcessRegister::rete_cq;
 		
+		//NewReteGraph::parseCondition(specLines);
+		NewReteGraph::parseConditionOriginal(specLines);
+
 		//RETE part . . .
-
-		RETE_Process::resetAndClearGraph();
-
+		//ReteGraph* tempGraph = new ReteGraph();
+		//tempGraph->addFullCondition(specLines);
+		//RETE_Process* rete = new RETE_Process(cqSpec->getInputStreamName(), cqSpec->getOutputStreamName(), tempGraph);
+		//ProcessRegister::addProcess(rete);
+		//RETE_Process::resetAndClearGraph();
 		//list<string> specLines;
 		//specPreprocess(ruleSpec, specLines);
 		//std::list<std::string>::iterator it = specLines.begin();
 		
 		//RETE_Process* rete = new RETE_Process();
 		//rete->addCQ(*it);
-		RETE_Process::addCQ(specLines);
-		//ProcessRegister::addProcess(rete);
 
-		RETE_Process::buildGraph();
+		//it is working but looks like doesn't fit here
+		//RETE_Process::addCQ(specLines);
+		//ProcessRegister::addProcess(rete);
+		//RETE_Process::buildGraph();
 	}
 
 	static void registerCEP(string ruleSpec) {
@@ -96,6 +106,8 @@ public:
 		ProcessRegister::addProcess(cep);
 		//store rule specifications
   		SpecRegister::register_cep_rule(cepSpec->getOutputStreamName(), ruleSpec);
+
+		//NewReteGraph::parseConditionOriginal(specLines);
 	}
 
 };

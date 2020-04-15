@@ -8,7 +8,7 @@
 #include "../op/DistanceOp.h"
 #include "../op/OperatorRegister.h"
 
-#include "../rete_net/rete_test.h"
+//#include "../rete_net/rete_test.h"
 
 CQProcess::CQProcess(vector<string> inputStreamNames, string outputStreamName) {
 	this->outputStreamName = outputStreamName;
@@ -25,11 +25,12 @@ void CQProcess::addOutputQueue(queue<EventPtr> *inputQueueOfDownstreamProcessUni
 
 bool CQProcess::process(int timeSlice){
 	Window* win = nullptr;
-
+	/*
 	rete_test r;
 
 	//flag
 	bool isEmpty = true;
+	*/
 	/*
 	//duplicate to rete
 	for (int i = 0; i < inputQueues.size(); i++) {
@@ -53,7 +54,7 @@ bool CQProcess::process(int timeSlice){
 		queue<EventPtr>* inputQueue = inputQueues[i];
 		while (!inputQueue->empty() && timeSlice_i > 0) {//current input queue is not empty.
 			EventPtr originalFrontEvent = inputQueue->front();
-
+			
 			if (predicates[i]->check(originalFrontEvent)) {//check the query condition.
 				if (windowList.size() == 0 || (inputQueues.size() == 1 && operatorNames.size() == 0)) {
 					EventPtr currEvent(originalFrontEvent->clone());//clone the event

@@ -35,4 +35,6 @@ public:
 	void setWindowSliding(int sliding);
 
 	string getOutputStreamName();
+
+	vector<string> getInputStreamName();
 };

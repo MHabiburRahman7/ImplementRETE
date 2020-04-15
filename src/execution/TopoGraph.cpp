@@ -71,3 +71,14 @@ void TopoGraph::clear() {
 	eventProcess = nullptr;
 	processMap.clear();
 }
+
+void TopoGraph::addRETEProcessUnitToGraph()
+{
+	if (eventProcess == nullptr)
+		throw "the process of Event Filter is null, please set it up first.";
+	//queue<EventPtr>* inputQueueOfB = WMSet::getWMInputQueue();
+	//if (eventProcess && eventProcess->getOutputStreamName() == inputNameOfB) {//Event Filtering
+	//	eventProcess->addOutputQueue(inputQueueOfB);
+	//}
+	eventProcess->addOutputQueue( NewReteGraph::getWMInputQueue()[0] );
+}

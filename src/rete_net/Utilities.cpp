@@ -22,10 +22,6 @@ vector<pair<string, string>> Utilities::tokenize(string temp)
 	vector<string> tempor;
 	vector<pair<string, string>> conditionMade;
 
-	//Maybe we need it later
-	//AlphaNode tempAlpha;
-	//BetaNode tempBeta;
-
 	tempor = {};
 	conditionMade = {};
 
@@ -105,6 +101,106 @@ vector<pair<string, string>> Utilities::tokenize(string temp)
 		itt++;
 	}
 
+	return conditionMade;
+}
+
+vector<pair<string, string>> Utilities::tokenizeMoreDetail(string temp)
+{
+	vector<string> tempor = {};
+	vector<pair<string, string>> conditionMade = {};
+
+	char* str = (char*)malloc(500);
+	strcpy(str, temp.c_str());
+	// Returns first token  
+	char* token = strtok(str, " ");
+	int itt = 0;
+	int ittMade = 0;
+
+	//IF
+	if (itt == 0 && strcmp(ToUpper(token).c_str(), "IF") == 0) {
+		itt++;
+		while (token != NULL)
+		{
+			token = strtok(NULL, " ");
+
+			//considered alpha
+			if (token == NULL && tempor.size() > 1) {
+				string cond = {};
+				for (int i = 0; i < tempor.size(); i++) {
+					cond += tempor[i];
+					cond += " ";
+				}
+				conditionMade.push_back({ "Alpha", cond });
+
+				tempor = {};
+				break;
+			}
+			else if (token == NULL && tempor.size() == 1) {
+
+				conditionMade.push_back({ "Beta", tempor[0] });
+
+				tempor = {};
+				break;
+			}
+			else if ((strcmp(ToUpper(token).c_str(), "AND") == 0
+				|| strcmp(ToUpper(token).c_str(), "THEN") == 0
+				|| strcmp(ToUpper(token).c_str(), "OR") == 0)
+				&& tempor.size() > 1) {
+
+				string cond = {};
+				for (int i = 0; i < tempor.size(); i++) {
+					cond += tempor[i];
+					cond += " ";
+				}
+				conditionMade.push_back({ "Alpha", cond });
+
+				tempor = {};
+			}
+			//Considered beta
+			else if ((strcmp(ToUpper(token).c_str(), "AND") == 0
+				|| strcmp(ToUpper(token).c_str(), "THEN") == 0
+				|| strcmp(ToUpper(token).c_str(), "OR") == 0)
+				&& tempor.size() == 1) {
+				string cond = {};
+				cond = tempor[0];
+				//cout << "considered beta " << cond << endl;
+
+				conditionMade.push_back({ "Beta", cond });
+
+				tempor = {};
+			}
+			else if (itt > 0 && (strcmp(ToUpper(token).c_str(), "AND") != 0
+				|| strcmp(ToUpper(token).c_str(), "OR") == 0
+				|| (strcmp(ToUpper(token).c_str(), "THEN") != 0))) {
+				tempor.push_back(token);
+			}
+			//Get OR/AND
+			if ((strcmp(ToUpper(token).c_str(), "AND") == 0)
+				|| (strcmp(ToUpper(token).c_str(), "OR") == 0)) {
+				conditionMade.push_back({ "condition", ToUpper(token).c_str() });
+			}
+
+			itt++;
+		}
+	}
+	//FROM
+	else if (itt == 0 && strcmp(ToUpper(token).c_str(), "FROM") == 0) {
+		token = strtok(NULL, " ");
+		conditionMade.push_back({ "Beta", token });
+		//return conditionMade;
+	}
+	//THEN
+	else if (itt == 0 && strcmp(ToUpper(token).c_str(), "THEN") == 0) {
+		token = strtok(NULL, " ");
+		conditionMade.push_back({ "Term", token });
+		//return conditionMade;
+	}
+	else {
+		string otherForm = token;
+		token = strtok(NULL, " ");
+		conditionMade.push_back({ ToUpper(otherForm), token });
+		//return conditionMade;
+	}
 	return conditionMade;
 }
 

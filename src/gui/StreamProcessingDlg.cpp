@@ -83,7 +83,7 @@ CStreamProcessingDlg::CStreamProcessingDlg(CWnd* pParent /*=nullptr*/)
 		\r\nThen targetData\
 		");
 
-	event_capture_rule = _T("If target.iff = ally\
+	event_capture_rule = _T("If iff = ally\
 		\r\nFrom targetData\
 		\r\nThen allytarget");
 	cq_rule = _T("If speed > 500 & elevation > 200\

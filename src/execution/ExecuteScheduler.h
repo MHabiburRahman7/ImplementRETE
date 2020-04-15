@@ -10,6 +10,9 @@
 #include "ProcessRegister.h"
 #include <queue>
 
+#include "../rete_net/WMSet.h"
+#include "../rete_net/NewReteGraph.h"
+
 //将Process对象和它的最近的结果出发时间关联起来
 struct Process_TriggerTime {
 	Process* process = nullptr;

@@ -11,8 +11,13 @@ string TerminalNode::getType()
 	return "Terminal";
 }
 
+bool TerminalNode::isEmptyResult()
+{
+	return false;
+}
+
 TerminalNode::TerminalNode(int id, string termName)
-	: Node(BaseNodeID, tempComingCondition)
+	: Node(id, termName)
 {
 	int itt = 0;
 	thisId = id;
@@ -31,4 +36,17 @@ TerminalNode::TerminalNode(int id, string termName)
 			term = token;
 		itt++;
 	}
+}
+
+void TerminalNode::addPair(Node* pair)
+{
+	//Duplicate check
+
+	//Connect pair
+
+}
+
+int TerminalNode::checkPair(Node* pair)
+{
+	return 0;
 }

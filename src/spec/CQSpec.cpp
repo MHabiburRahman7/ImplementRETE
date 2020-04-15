@@ -93,3 +93,8 @@ void CQSpec::setWindowSliding(int sliding) {
 string CQSpec::getOutputStreamName() {
 	return this->outputStream;
 }
+
+vector<string> CQSpec::getInputStreamName()
+{
+	return inputStreams;
+}

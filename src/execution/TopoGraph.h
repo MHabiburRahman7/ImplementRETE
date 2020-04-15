@@ -8,6 +8,7 @@
 #include <set>
 
 #include "../rete_net/RETE_Process.h"
+//#include "../rete_net/WMSet.h"
 
 /*
 This class is to build topo computation graph for processing units, 
@@ -20,6 +21,9 @@ public:
 	static void setEventFilter(EventProcess* ep);
 	//make eventProcess==nullptr, and clear processMap.
 	static void clear();
+
+	static void addRETEProcessUnitToGraph();
+
 private:
 	static void addProcessUnitToGraph(string inputStreamNameOfB, queue<EventPtr> * inputQueueOfB, string outputNameOfB);
 

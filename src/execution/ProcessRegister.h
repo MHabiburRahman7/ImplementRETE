@@ -51,7 +51,9 @@ private:
 	static vector<Process*> cqVec;
 	static set<CEPProcess*> cepSet;
 
-	static Process* rete_cq;
+	//lets treat the same;
+	static vector<Process*> cqRete;
+	//static Process* rete_cq;
 
 public:
 	static std::recursive_mutex mutexOfProcessRegister;//mutex lock among threads
