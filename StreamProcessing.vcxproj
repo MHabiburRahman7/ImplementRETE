@@ -212,10 +212,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\rete_net\NewReteGraph.h" />
-    <ClInclude Include="src\rete_net\RETE_Process.h" />
-    <ClInclude Include="src\rete_net\ReteGraph.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\rete_net\AlphaNode.h" />
     <ClInclude Include="src\rete_net\BetaNode.h" />
     <ClInclude Include="src\rete_net\Node.h" />
@@ -315,10 +311,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rete_net\NewReteGraph.cpp" />
-    <ClCompile Include="src\rete_net\RETE_Process.cpp" />
-    <ClCompile Include="src\rete_net\ReteGraph.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="src\rete_net\AlphaNode.cpp" />
     <ClCompile Include="src\rete_net\BetaNode.cpp" />
     <ClCompile Include="src\rete_net\Node.cpp" />

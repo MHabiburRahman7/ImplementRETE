@@ -40,7 +40,7 @@ void ExecuteScheduler::buildGraph() {
 
 	//WMSet::createInputQueue({ "targetData" });
 	NewReteGraph::createWMSet({ "targetData" });
-	TopoGraph::addRETEProcessUnitToGraph();
+	TopoGraph::addRETEProcessUnitToGraph(); //Register WMSet as the next output of EventProcess
 
 	NewReteGraph::buildNetNode();
 

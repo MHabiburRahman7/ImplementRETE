@@ -28,8 +28,8 @@ public:
 
 	static void connectNodes(Node& n1, Node& n2, Node& n3);
 
-	static void process(queue<EventPtr>* input); //idk do i need this?
-	static void processSingle(EventPtr* e);//
+	//static void process(queue<EventPtr>* input); //idk do i need this?
+	//static void processSingle(EventPtr* e);//
 	static void processRete(int timeSlice);
 
 	static Node* findAlphaNode(string dataType);

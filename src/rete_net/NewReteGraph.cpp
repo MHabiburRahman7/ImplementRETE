@@ -215,6 +215,8 @@ void NewReteGraph::parseCondition(list<string> conditionList)
 
 	string tempProduct = "";
 	vector<string> conditionFromZero, latestBetaMade;
+	//Condition from zero means set of And, Or, sequentially from the beginning of IF
+	//latestBetaMade means, i tried to build temporary beta
 
 	for (int i = 0; i < collectedMade[0].size(); i++) {
 		string tempCondition = "";
@@ -261,7 +263,6 @@ void NewReteGraph::parseCondition(list<string> conditionList)
 		addBetaReturnNode(tempCond);
 		
 		conditionFromZero.pop_back();
-		//v.erase(v.begin());
 	}
 
 	//connect with terminal ._.
