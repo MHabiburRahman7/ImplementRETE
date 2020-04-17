@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Node.h"
+#include "../execution/EventProcess.h"
 
 class TerminalNode : public Node
 {
@@ -24,9 +25,11 @@ public:
 
 	void addPair(Node* pair);
 	int checkPair(Node* pair);
+	queue<EventPtr>* getEvRes();
 
 private:
 	int thisId;
 	vector<Node*> ListOfNextPair;
+	queue<EventPtr>* EventResult = new queue<EventPtr>();
 };
 

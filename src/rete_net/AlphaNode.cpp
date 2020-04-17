@@ -10,9 +10,6 @@ string AlphaNode::getType()
 	return "Alpha";
 }
 
-AlphaNode::AlphaNode() : Node(BaseNodeID, tempComingCondition)
-{
-}
 
 AlphaNode::AlphaNode(int id_given, string condition) : Node(id_given, condition)
 {
@@ -63,6 +60,11 @@ Node* AlphaNode::getSinglePair(int i)
 vector<Node*> AlphaNode::getAllPairs()
 {
 	return listOfBetaPairsInNode;
+}
+
+queue<EventPtr>* AlphaNode::getEvRes()
+{
+	return EventResult;
 }
 
 int AlphaNode::checkExistPair(Node* pairs)
@@ -154,6 +156,10 @@ int AlphaNode::ClearResults()
 
 void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 {
+	ClearResults();
+	queue<EventPtr> inputQueue_local = *inputQueue;
+	//auto itt_local = inputQueue_local.front();
+	
 	float limit = atof(thisVarLimit.c_str());
 
 	if (limit == 0) {//its not a integer val
@@ -164,8 +170,9 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 			cases = 1;
 
 		int timeSlice_i = TimeSlice;
-		while (!inputQueue->empty() && timeSlice_i > 0) {//current input queue is not empty.
-			EventPtr originalFrontEvent = inputQueue->front();
+		while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
+			//EventPtr originalFrontEvent = inputQueue_local->front();
+			EventPtr originalFrontEvent = inputQueue_local.front();
 
 			if (thisVarLimit == "All") {
 				EventResult->push(originalFrontEvent);
@@ -178,7 +185,8 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 				EventResult->push(originalFrontEvent);
 			}
 
-			inputQueue->pop();
+			inputQueue_local.pop();
+			//itt_local+=1;
 			timeSlice_i--;
 		}
 	}
@@ -200,8 +208,8 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 			cases = 4;
 
 		int timeSlice_i = TimeSlice;
-		while (!inputQueue->empty() && timeSlice_i > 0) {//current input queue is not empty.
-			EventPtr originalFrontEvent = inputQueue->front();
+		while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
+			EventPtr originalFrontEvent = inputQueue_local.front();
 
 			if (cases == 0 && originalFrontEvent->getFloat(thisDataType) <= limit) {
 				//testRes.push_back(test_cases[i]);
@@ -220,7 +228,7 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 				EventResult->push(originalFrontEvent);
 			}
 
-			inputQueue->pop();
+			inputQueue_local.pop();
 			timeSlice_i--;
 		}
 	}

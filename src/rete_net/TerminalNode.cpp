@@ -50,3 +50,8 @@ int TerminalNode::checkPair(Node* pair)
 {
 	return 0;
 }
+
+queue<EventPtr>* TerminalNode::getEvRes()
+{
+	return nullptr;
+}

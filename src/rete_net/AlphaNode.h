@@ -16,11 +16,11 @@ public:
 	//Starter kit
 	int getID();
 	string getType();
-	AlphaNode();
+	//AlphaNode();
 	AlphaNode(int id, string condition);
 	
-	int BaseNodeID; // unused
-	string tempComingCondition; //unused
+	//int BaseNodeID; // unused
+	//string tempComingCondition; //unused
 
 	//Lets connect it
 	int checkExistPair(Node* pairs);
@@ -47,9 +47,11 @@ public:
 	Node* getSinglePair(int i);
 	vector<Node*> getAllPairs();
 
+	queue<EventPtr>* getEvRes();
+
 private:
 	int id;
-	queue<EventPtr>* EventResult = new queue<EventPtr>;
+	queue<EventPtr>* EventResult = new queue<EventPtr>();
 
 	//Condition
 	string thisDataType;

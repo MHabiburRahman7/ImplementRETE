@@ -5,7 +5,7 @@
 #include "../../execution/ExecuteScheduler.h"
 #include "RuleSpec.h"
 
-#include "../../rete_net/ReteGraph.h"
+//#include "../../rete_net/ReteGraph.h"
 
 using namespace std;
 

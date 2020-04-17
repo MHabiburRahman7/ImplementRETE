@@ -104,7 +104,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>C:\Users\USER\Documents\Kuliah\Professor Thing\ADD\Liyang's code new\StreamProcessing\spatialindexLib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\USER\Documents\Kuliah\Professor Thing\ADD\Liyang's code new\StreamProcessing_tryImplementRETE\spatialindexLib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>spatialindex-32.lib;</AdditionalDependencies>
     </Link>
     <Midl>
@@ -305,7 +305,9 @@
     <ClInclude Include="src\util\Utils.h" />
     <ClInclude Include="src\op\win\Window.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="src\rete_net\TerminalNode.h" />
+    <ClInclude Include="src\rete_net\TerminalNode.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="src\rete_net\Utilities.h" />
     <ClInclude Include="src\rete_net\WMSet.h" />
   </ItemGroup>
@@ -524,7 +526,9 @@
     </ClCompile>
     <ClCompile Include="src\util\EventGenerator.cpp" />
     <ClCompile Include="src\util\Utils.cpp" />
-    <ClCompile Include="src\rete_net\TerminalNode.cpp" />
+    <ClCompile Include="src\rete_net\TerminalNode.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\rete_net\Utilities.cpp" />
     <ClCompile Include="src\rete_net\WMSet.cpp" />
   </ItemGroup>

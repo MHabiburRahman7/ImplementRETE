@@ -18,6 +18,8 @@ public:
 	virtual string getType() = 0;
 	virtual bool isEmptyResult() = 0;
 
+	virtual queue<EventPtr>* getEvRes() = 0;
+
 	string justCondition;
 };
 

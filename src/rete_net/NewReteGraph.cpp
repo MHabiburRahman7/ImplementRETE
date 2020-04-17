@@ -307,6 +307,10 @@ void NewReteGraph::parseConditionOriginal(list<string> condList)
 		Node* tempSingleNode;
 
 		if (collectedMade[0][i].first == "Alpha") {
+			//check if similar alpha node is exist
+
+
+			//else
 			tempSingleNode = addAlphaReturnNode(collectedMade[0][i].second);
 			tempBuildNode.push_back(tempSingleNode);
 		}
@@ -458,10 +462,10 @@ void NewReteGraph::processRete(int timeSlice)
 				}
 			}
 
-			break;
+			//break;
 	}
 
-	vector<int> possible_match = {};
+	//vector<int> possible_match = {};
 
 	//BFS based on Queue
 	while (!pushedBeta.empty()) {
@@ -503,6 +507,7 @@ void NewReteGraph::processRete(int timeSlice)
 		if (isDone)
 			break;
 	}
+	int a = 0;
 }
 
 Node* NewReteGraph::findAlphaNode(string dataType)

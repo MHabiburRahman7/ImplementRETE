@@ -1,9 +1,9 @@
 #include "BetaNode.h"
 
-BetaNode::BetaNode()
-	: Node(BaseNodeID, tempComingCondition)
-{
-}
+//BetaNode::BetaNode()
+//	: Node(BaseNodeID, tempComingCondition)
+//{
+//}
 
 BetaNode::BetaNode(int id_given, string condition)
 	: Node(id_given, condition)
@@ -86,10 +86,7 @@ string BetaNode::getRightConnName()
 	return rightSourcePair.first;
 }
 
-queue<EventPtr>* BetaNode::getResult()
-{
-	return EventResult;
-}
+
 
 Node* BetaNode::getSinglePair(int i)
 {
@@ -137,56 +134,67 @@ int BetaNode::setRightConnection(Node* node)
 
 int BetaNode::processBetaNode(int timeSlice)
 {
-	queue<EventPtr>* left = dynamic_cast<BetaNode*>(leftSourcePair.second)->getResult();
-	queue<EventPtr>* right = dynamic_cast<BetaNode*>(rightSourcePair.second)->getResult();
+	ClearResult();
+
+	queue<EventPtr> left = *leftSourcePair.second->getEvRes();
+	queue<EventPtr> right = *rightSourcePair.second->getEvRes();
 	
 	//Ordered join method
-	int it1 = 0, it2 = 0, itt = 0;
+	//int it1 = 0, it2 = 0, itt = 0;
 	if (Utilities::ToUpper(thisCondition) == "AND") {
 
 		//EventPtr ev = left->front();
-		if (left->size() == 0 || right->size() == 0)
+		if (left.size() == 0 || right.size() == 0)
 			return 0;
 
-		auto leftItt = left->front();
-		auto leftEnd = left->back();
-		auto rightItt = right->front();
-		auto rightEnd = right->back();
+		//auto leftItt = left->front();
+		//auto leftEnd = left->back();
+		//auto rightItt = right->front();
+		//auto rightEnd = right->back();
 
-		it1 = leftItt->getId();
-		it2 = rightItt->getId();
+		//it1 = leftItt->getId();
+		//it2 = rightItt->getId();
 
 		while (1) {
-			if (((EventPtr)left->front())->getId() == ((EventPtr)right->front())->getId()) {
-				EventResult->push((EventPtr)left->front());
-				if (left->size() > 0)
-					left->pop();
-				else
-					right->pop();
+			if (left.size() == 0 && right.size() == 0)
+				break;
 
-				if (right->size() > 0)
-					right->pop();
+			EventPtr frontLeftEvent = left.front();
+			EventPtr frontRightEvent = right.front();
+			//if ((static_cast<EventPtr*>(left).front())->getId() == ((EventPtr)right.front())->getId()) {
+			if (frontLeftEvent->getId() == frontRightEvent->getId()) {
+				//int c;
+				EventResult->push(frontLeftEvent);
+				if (left.size() > 0)
+					left.pop();
 				else
-					left->pop();
-			}
-			else if (((EventPtr)left->front())->getId() > ((EventPtr)right->front())->getId()) {
-				if (right->size() > 0)
-					right->pop();
-				else
-					left->pop();
-			}
-			else if (((EventPtr)left->front())->getId() < ((EventPtr)right->front())->getId()) {
-				if (left->size() > 0)
-					left->pop();
-				else
-					right->pop();
-			}
-			itt++;
+					right.pop();
 
-			if (left->size() == 1 && right->size() == 1) {
-				if (((EventPtr)left->front())->getId() == ((EventPtr)right->front())->getId())
-					//testRes.push_back({ WME[it1].first, thisProduct });
-					EventResult->push((EventPtr)left->front());
+				if (right.size() > 0)
+					right.pop();
+				else
+					left.pop();
+			}
+			//else if (((EventPtr)left.front())->getId() > ((EventPtr)right.front())->getId()) {
+			else if(frontLeftEvent->getId() > frontRightEvent->getId()){
+				if (right.size() > 0)
+					right.pop();
+				else
+					left.pop();
+			}
+			//else if (((EventPtr)left.front())->getId() < ((EventPtr)right.front())->getId()) {
+			else if(frontLeftEvent->getId() < frontRightEvent->getId()){
+				if (left.size() > 0)
+					left.pop();
+				else
+					right.pop();
+			}
+			//itt++;
+
+			if (left.size() == 1 && right.size() == 1) {
+				//if (((EventPtr)left.front())->getId() == ((EventPtr)right.front())->getId())
+				if(frontLeftEvent->getId() == frontRightEvent->getId())
+					EventResult->push(frontLeftEvent);
 				break;
 			}
 
@@ -231,6 +239,11 @@ bool BetaNode::isEmptyResult()
 	if (EventResult == NULL || EventResult->size() == 0)
 		return true;
 	return false;
+}
+
+queue<EventPtr>* BetaNode::getEvRes()
+{
+	return EventResult;
 }
 
 string BetaNode::getProduct()

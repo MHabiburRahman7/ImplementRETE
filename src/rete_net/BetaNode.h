@@ -13,11 +13,11 @@ class BetaNode : public Node
 public:
 	//vector<pair<int, string>> testRes;
 
-	BetaNode();
+	//BetaNode();
 	BetaNode(int id, string condition);
 	
-	int BaseNodeID; // unused
-	string tempComingCondition; // unused
+	//int BaseNodeID; // unused
+	//string tempComingCondition; // unused
 
 	//Connected to beta and terminal what
 	//BetaNode* betaPair;
@@ -52,7 +52,6 @@ public:
 	Node* getRightConnNode();
 	string getLeftConnName();
 	string getRightConnName();
-	queue<EventPtr>* getResult();
 	Node* getSinglePair(int i);
 	vector<Node*> getAllPairs();
 
@@ -62,6 +61,8 @@ public:
 	int processBetaNode(int timeSlice);
 
 	bool isEmptyResult();
+
+	queue<EventPtr>* getEvRes();
 	
 private:
 	int id;
@@ -74,7 +75,7 @@ private:
 
 	pair<string, Node*> leftSourcePair, rightSourcePair, termPair;
 
-	queue<EventPtr>* EventResult = new queue<EventPtr>;
+	queue<EventPtr>* EventResult = new queue<EventPtr>();
 	TerminalNode* terminalPair;
 
 	//Connected Pairs (I am not sure with this)
