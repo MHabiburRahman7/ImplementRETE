@@ -107,7 +107,7 @@ public:
 		//store rule specifications
   		SpecRegister::register_cep_rule(cepSpec->getOutputStreamName(), ruleSpec);
 
-		//NewReteGraph::parseConditionOriginal(specLines);
+		NewReteGraph::parseConditionOriginal(specLines);
 	}
 
 };

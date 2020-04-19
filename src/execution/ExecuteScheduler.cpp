@@ -38,7 +38,6 @@ void ExecuteScheduler::buildGraph() {
 		TopoGraph::addProcessUnitToGraph(p);
 	}
 
-	//WMSet::createInputQueue({ "targetData" });
 	NewReteGraph::createWMSet({ "targetData" });
 	TopoGraph::addRETEProcessUnitToGraph(); //Register WMSet as the next output of EventProcess
 

@@ -122,7 +122,6 @@ vector<pair<string, string>> Utilities::tokenizeMoreDetail(string temp)
 		while (token != NULL)
 		{
 			token = strtok(NULL, " ");
-
 			//considered alpha
 			if (token == NULL && tempor.size() > 1) {
 				string cond = {};
@@ -137,7 +136,15 @@ vector<pair<string, string>> Utilities::tokenizeMoreDetail(string temp)
 			}
 			else if (token == NULL && tempor.size() == 1) {
 
-				conditionMade.push_back({ "Beta", tempor[0] });
+				//conditionMade.push_back({ "Beta", tempor[0] });
+				//string exi = "exist";
+				//int pos = tempor[0].find(exi);
+				if (tempor[0].find("(") > 0 && tempor[0].find(")") > 0) {
+					conditionMade.push_back({ "Alpha", tempor[0] });
+				}
+				else {
+					conditionMade.push_back({ "Beta", tempor[0] });
+				}
 
 				tempor = {};
 				break;
@@ -165,7 +172,12 @@ vector<pair<string, string>> Utilities::tokenizeMoreDetail(string temp)
 				cond = tempor[0];
 				//cout << "considered beta " << cond << endl;
 
-				conditionMade.push_back({ "Beta", cond });
+				if (cond.find("(") > 0 && cond.find(")") > 0) {
+					conditionMade.push_back({ "Alpha", cond });
+				}
+				else {
+					conditionMade.push_back({ "Beta", cond });
+				}
 
 				tempor = {};
 			}

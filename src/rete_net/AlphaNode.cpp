@@ -21,19 +21,30 @@ AlphaNode::AlphaNode(int id_given, string condition) : Node(id_given, condition)
 	strcpy(str, condition.c_str());
 	// Returns first token  
 	char* token = strtok(str, " ");
-
-	// Keep printing tokens while one of the 
-	// delimiters present in str[].
-	thisDataType = token;
-	while (token != NULL)
-	{
-		//printf("%s\n", token);
-		token = strtok(NULL, " ");
-		if (itt == 0)
-			thisCondition = token;
-		else if (itt == 1)
-			thisVarLimit = token;
-		itt++;
+	string s(token);
+	
+	int open = s.find("(");
+	int close = s.find(")");
+	if (open > 0 && close > 0) {
+		
+		thisDataType = "exist";
+		thisVarLimit = s.substr(open + 1, close - open - 1);
+		thisCondition = "==";
+	}
+	else {
+		// Keep printing tokens while one of the 
+		// delimiters present in str[].
+		thisDataType = token;
+		while (token != NULL)
+		{
+			//printf("%s\n", token);
+			token = strtok(NULL, " ");
+			if (itt == 0)
+				thisCondition = token;
+			else if (itt == 1)
+				thisVarLimit = token;
+			itt++;
+		}
 	}
 }
 
