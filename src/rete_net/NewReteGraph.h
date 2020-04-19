@@ -17,7 +17,7 @@ public:
 	//static void addBeta(string condition);
 	//static void addTerminal(string condition);
 
-	static Node* addAlphaReturnNode(string condition);
+	static Node* addAlphaReturnNode(string condition, string wmSource);
 	static Node* addBetaReturnNode(string condition);
 	static Node* addTerminalReturnNode(string condition);
 
@@ -38,11 +38,21 @@ public:
 
 	//About Working Memory
 	static void createWMSet(vector<string> inputName);
+	static void createWMSet();
+
 	static vector<queue<EventPtr>*> getWMInputQueue();
+	static queue<EventPtr>* getSingleInputQueue(int i);
+	static string getSingleInputQueueName(int i);
+	static queue<EventPtr>* getSingleInputQueue(string inputName);
 	static void printWMSet();
 	static void clearWM();
 
+	static void regisEcOutput(list<string> input);
+	static void regisCqOutput(list<string> input);
+	static void regisCEPInput(list<string> input);
+
 private:
+	static vector<string> cqOutputList, cepFromList, ecOutputList;
 	static WMSet m_WMSet;
 	static vector<int>alphaListIDDictionary;
 	static vector<int>betaListIDDictionary;

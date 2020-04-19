@@ -11,8 +11,9 @@ string AlphaNode::getType()
 }
 
 
-AlphaNode::AlphaNode(int id_given, string condition) : Node(id_given, condition)
+AlphaNode::AlphaNode(int id_given, string condition, string wmNum) : Node(id_given, condition)
 {
+	wmNumber = wmNum;
 	int itt = 0;
 
 	id = id_given;
@@ -61,6 +62,11 @@ string AlphaNode::getCondition()
 string AlphaNode::getVarLimit()
 {
 	return thisVarLimit;
+}
+
+string AlphaNode::getWmName()
+{
+	return wmNumber;
 }
 
 Node* AlphaNode::getSinglePair(int i)
@@ -186,6 +192,9 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 			EventPtr originalFrontEvent = inputQueue_local.front();
 
 			if (thisVarLimit == "All") {
+				EventResult->push(originalFrontEvent);
+			}
+			else if (thisDataType == "exist") {
 				EventResult->push(originalFrontEvent);
 			}
 			else if (cases == 0 && originalFrontEvent->getString(thisDataType) == thisVarLimit) {

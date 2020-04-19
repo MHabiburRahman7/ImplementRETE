@@ -38,8 +38,14 @@ void ExecuteScheduler::buildGraph() {
 		TopoGraph::addProcessUnitToGraph(p);
 	}
 
-	NewReteGraph::createWMSet({ "targetData" });
-	TopoGraph::addRETEProcessUnitToGraph(); //Register WMSet as the next output of EventProcess
+	//NewReteGraph::createWMSet({ "targetData" });
+	NewReteGraph::createWMSet();
+
+	for (Process* p : ProcessRegister::getAllCQ()) {//add CQ
+		TopoGraph::addRETEProcessUnitToGraph(p);
+	}
+
+	//TopoGraph::addRETEProcessUnitToGraph(); //Register WMSet as the next output of EventProcess
 
 	NewReteGraph::buildNetNode();
 

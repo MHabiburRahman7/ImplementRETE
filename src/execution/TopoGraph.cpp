@@ -72,13 +72,20 @@ void TopoGraph::clear() {
 	processMap.clear();
 }
 
-void TopoGraph::addRETEProcessUnitToGraph()
+void TopoGraph::addRETEProcessUnitToGraph(Process* processB)
 {
 	if (eventProcess == nullptr)
 		throw "the process of Event Filter is null, please set it up first.";
-	//queue<EventPtr>* inputQueueOfB = WMSet::getWMInputQueue();
-	//if (eventProcess && eventProcess->getOutputStreamName() == inputNameOfB) {//Event Filtering
-	//	eventProcess->addOutputQueue(inputQueueOfB);
-	//}
-	eventProcess->addOutputQueue( NewReteGraph::getWMInputQueue()[0] );
+	if (!processB) return; // nullptr
+	if (processMap.find(processB->getOutputStreamName()) != processMap.end()) {
+		for (int i = 0; i < NewReteGraph::getWMInputQueue().size(); i++) {
+			if (Utilities::ToUpper(processB->getOutputStreamName())
+				== Utilities::ToUpper(NewReteGraph::getSingleInputQueueName(i))) {
+				processB->addOutputQueue(NewReteGraph::getSingleInputQueue(i), NewReteGraph::getSingleInputQueueName(i));
+			}
+		}
+		//processMap.find(processB->getOutputStreamName())
+	}else
+		return; // element existing
+
 }

@@ -7,6 +7,8 @@ vector<Node*> NewReteGraph::NodeList;
 
 WMSet NewReteGraph::m_WMSet;
 
+vector<string> NewReteGraph::cqOutputList, NewReteGraph::cepFromList, NewReteGraph::ecOutputList;
+
 //void NewReteGraph::addAlpha(string condition)
 //{
 //	Node* tempNode;
@@ -56,7 +58,7 @@ WMSet NewReteGraph::m_WMSet;
 //	NodeList.push_back(tempNode);
 //}
 
-Node* NewReteGraph::addAlphaReturnNode(string condition)
+Node* NewReteGraph::addAlphaReturnNode(string condition, string wmSource)
 {
 	Node* tempNode;
 	//string space = " ";
@@ -72,7 +74,7 @@ Node* NewReteGraph::addAlphaReturnNode(string condition)
 
 	//Try to use OOP
 	int masterNodeID = NodeList.size();
-	tempNode = new AlphaNode(masterNodeID, condition);
+	tempNode = new AlphaNode(masterNodeID, condition, wmSource);
 	NodeList.push_back(tempNode);
 	alphaListIDDictionary.push_back(masterNodeID);
 
@@ -209,7 +211,7 @@ void NewReteGraph::parseCondition(list<string> conditionList)
 	//Rebuild the tokenized
 	for (int i = 0; i < collectedMade[0].size(); i++) {
 		if (collectedMade[0][i].first == "Alpha") {
-			addAlphaReturnNode(collectedMade[0][i].second);
+			//addAlphaReturnNode(collectedMade[0][i].second);
 		}
 	}
 
@@ -313,7 +315,7 @@ void NewReteGraph::parseConditionOriginal(list<string> condList)
 			}
 			//else
 			else {
-				tempSingleNode = addAlphaReturnNode(collectedMade[0][i].second);
+				tempSingleNode = addAlphaReturnNode(collectedMade[0][i].second, collectedMade[1][0].second);
 				tempBuildNode.push_back(tempSingleNode);
 			}
 		}
@@ -445,7 +447,12 @@ void NewReteGraph::processRete(int timeSlice)
 	for (int j = 0; j < alphaListIDDictionary.size(); j++) {
 
 		//test on alpha
-		static_cast<AlphaNode*>(NodeList[alphaListIDDictionary[j]])->testAlphaAndSaveHere(m_WMSet.getWMInputQueue()[0], timeSlice);
+		for (int i = 0; i < getWMInputQueue().size(); i++) {
+			
+			if(static_cast<AlphaNode*>(NodeList[alphaListIDDictionary[j]])->getWmName() 
+				== m_WMSet.getSingleInputQueueName(i))
+				static_cast<AlphaNode*>(NodeList[alphaListIDDictionary[j]])->testAlphaAndSaveHere(m_WMSet.getWMInputQueue()[0], timeSlice);
+		}
 
 			//activate the beta
 			//searching all pair and push it
@@ -557,13 +564,40 @@ void NewReteGraph::createWMSet(vector<string> inputName)
 	//for (int i = 0; i < inputName.size(); i++) {
 	m_WMSet.createInputQueue(inputName[0]);
 
-	addAlphaReturnNode(inputName[0] + " == All");
+	//addAlphaReturnNode(inputName[0] + " == All");
 	//}
+}
+
+void NewReteGraph::createWMSet()
+{
+	for (int i = 0; i < cqOutputList.size(); i++) {
+		for(int j=0; j<cepFromList.size(); j++){
+			if (cqOutputList[i] == cepFromList[j]) {
+				m_WMSet.createInputQueue(cqOutputList[i]);
+				addAlphaReturnNode(cqOutputList[i] + " == All", cqOutputList[i]);
+			}
+		}
+	}
 }
 
 vector<queue<EventPtr>*> NewReteGraph::getWMInputQueue()
 {
 	return m_WMSet.getWMInputQueue();
+}
+
+queue<EventPtr>* NewReteGraph::getSingleInputQueue(int i)
+{
+	return m_WMSet.getSingleInputQueue(i);
+}
+
+string NewReteGraph::getSingleInputQueueName(int i)
+{
+	return m_WMSet.getSingleInputQueueName(i);
+}
+
+queue<EventPtr>* NewReteGraph::getSingleInputQueue(string inputName)
+{
+	return m_WMSet.getSingleInputQueue(inputName);
 }
 
 void NewReteGraph::printWMSet()
@@ -575,6 +609,106 @@ void NewReteGraph::clearWM()
 {
 	m_WMSet.clearSet();
 }
+
+void NewReteGraph::regisEcOutput(list<string> input)
+{
+	//Parsing parsing~
+	vector<string> newInputForm;
+
+	for (auto v : input) {
+		newInputForm.push_back(v);
+	}
+
+	//edit & into AND
+	string temp;
+	for (auto v : newInputForm[0]) {
+		if (v == '&') {
+			temp += " AND ";
+		}
+		else {
+			temp += v;
+		}
+	}
+	newInputForm[0] = temp;
+
+	char* str = (char*)malloc(500);
+	//tok
+	//strcpy(str, temp.c_str());
+	for (int i = 0; i < newInputForm.size(); i++) {
+		strcpy(str, newInputForm[i].c_str());
+		str = strtok(str, " ");
+		if (Utilities::ToUpper(str) == "THEN") {
+			//str = strtok(NULL, " ");
+			ecOutputList.push_back(strtok(NULL, " "));
+		}
+	}
+}
+
+void NewReteGraph::regisCqOutput(list<string> input)
+{
+	//Parsing parsing~
+	vector<string> newInputForm;
+
+	for (auto v : input) {
+		newInputForm.push_back(v);
+	}
+
+	//edit & into AND
+	string temp;
+	for (auto v : newInputForm[0]) {
+		if (v == '&') {
+			temp += " AND ";
+		}
+		else {
+			temp += v;
+		}
+	}
+	newInputForm[0] = temp;
+
+	char* str = (char*)malloc(500);
+	//strcpy(str, temp.c_str());
+	for (int i = 0; i < newInputForm.size(); i++) {
+		strcpy(str, newInputForm[i].c_str());
+		str = strtok(str, " ");
+		//str = strtok(str, " ");
+		if (Utilities::ToUpper(str) == "THEN")
+			cqOutputList.push_back(strtok(NULL, " "));
+	}
+}
+
+void NewReteGraph::regisCEPInput(list<string> input)
+{
+	//Parsing parsing~
+	vector<string> newInputForm;
+
+	for (auto v : input) {
+		newInputForm.push_back(v);
+	}
+
+	//edit & into AND
+	string temp;
+	for (auto v : newInputForm[0]) {
+		if (v == '&') {
+			temp += " AND ";
+		}
+		else {
+			temp += v;
+		}
+	}
+	newInputForm[0] = temp;
+
+	char* str = (char*)malloc(500);
+	//strcpy(str, temp.c_str());
+	for (int i = 0; i < newInputForm.size(); i++) {
+		strcpy(str, newInputForm[i].c_str());
+		str = strtok(str, " ");
+		//str = strtok(str, " ");
+		if (Utilities::ToUpper(str) == "FROM")
+			cepFromList.push_back(strtok(NULL, " "));
+	}
+}
+
+
 
 //Node* NewReteGraph::findAlphaNode(Node* tempNode)
 //{

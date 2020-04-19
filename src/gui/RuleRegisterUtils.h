@@ -48,6 +48,8 @@ public:
 		EventFilterSpec* eventFilterSpec = EventFilterParser::parseOneEventFilterSpec(specLines);
 		EventProcess* ec = eventFilterSpec->instance();
 		ProcessRegister::registerEventFilter(ec);
+
+		//NewReteGraph::regisEcOutput(specLines);
 	}
 
 	static void registerEventCapture(string ruleSpec) {
@@ -60,7 +62,8 @@ public:
 		//SpecRegister::register_event_capture_rule(spec->getOutputStream(), ruleSpec);
 
 		//NewReteGraph::parseCondition(specLines);
-		NewReteGraph::parseConditionOriginal(specLines);
+		//NewReteGraph::parseConditionOriginal(specLines);
+		NewReteGraph::regisEcOutput(specLines);
 	}
 
 	static void registerCQ(string ruleSpec) {		
@@ -77,7 +80,8 @@ public:
 		//ReteGraph *temp = ProcessRegister::rete_cq;
 		
 		//NewReteGraph::parseCondition(specLines);
-		NewReteGraph::parseConditionOriginal(specLines);
+		//NewReteGraph::parseConditionOriginal(specLines);
+		NewReteGraph::regisCqOutput(specLines);
 
 		//RETE part . . .
 		//ReteGraph* tempGraph = new ReteGraph();
@@ -108,6 +112,7 @@ public:
   		SpecRegister::register_cep_rule(cepSpec->getOutputStreamName(), ruleSpec);
 
 		NewReteGraph::parseConditionOriginal(specLines);
+		NewReteGraph::regisCEPInput(specLines);
 	}
 
 };

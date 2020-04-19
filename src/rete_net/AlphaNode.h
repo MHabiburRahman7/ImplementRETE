@@ -17,7 +17,7 @@ public:
 	int getID();
 	string getType();
 	//AlphaNode();
-	AlphaNode(int id, string condition);
+	AlphaNode(int id, string condition, string wmNum);
 	
 	//int BaseNodeID; // unused
 	//string tempComingCondition; //unused
@@ -44,6 +44,7 @@ public:
 	string getAlphaDataType();
 	string getCondition();
 	string getVarLimit();
+	string getWmName();
 	Node* getSinglePair(int i);
 	vector<Node*> getAllPairs();
 
@@ -51,6 +52,7 @@ public:
 
 private:
 	int id;
+	string wmNumber;
 	queue<EventPtr>* EventResult = new queue<EventPtr>();
 
 	//Condition

@@ -22,7 +22,7 @@ public:
 	//make eventProcess==nullptr, and clear processMap.
 	static void clear();
 
-	static void addRETEProcessUnitToGraph();
+	static void addRETEProcessUnitToGraph(Process* processB);
 
 private:
 	static void addProcessUnitToGraph(string inputStreamNameOfB, queue<EventPtr> * inputQueueOfB, string outputNameOfB);
