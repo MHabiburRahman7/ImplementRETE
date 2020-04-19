@@ -308,11 +308,14 @@ void NewReteGraph::parseConditionOriginal(list<string> condList)
 
 		if (collectedMade[0][i].first == "Alpha") {
 			//check if similar alpha node is exist
-
-
+			if (tempSingleNode = findNode(collectedMade[0][i].second, 0)) {
+				tempBuildNode.push_back(tempSingleNode);
+			}
 			//else
-			tempSingleNode = addAlphaReturnNode(collectedMade[0][i].second);
-			tempBuildNode.push_back(tempSingleNode);
+			else {
+				tempSingleNode = addAlphaReturnNode(collectedMade[0][i].second);
+				tempBuildNode.push_back(tempSingleNode);
+			}
 		}
 		else if (collectedMade[0][i].first == "condition") {
 			andOrCondition.push_back(collectedMade[0][i].second);
@@ -524,6 +527,27 @@ Node* NewReteGraph::findBetaNode(string product)
 	for (int i = 0; i < betaListIDDictionary.size(); i++) {
 		if (static_cast<BetaNode*>(NodeList[betaListIDDictionary[i]])->getProduct() == product)
 			return NodeList[betaListIDDictionary[i]];
+	}
+	return nullptr;
+}
+
+Node* NewReteGraph::findNode(string expression, int nodeType)
+{
+	// 0 --> alpha
+	// 1 --> beta
+	if (nodeType == 0) {
+		for (int i = 0; i < alphaListIDDictionary.size(); i++) {
+			if (NodeList[alphaListIDDictionary[i]]->justCondition == expression) {
+				return NodeList[alphaListIDDictionary[i]];
+			}
+		}
+	}
+	else if (nodeType == 1) {
+		for (int i = 0; i < betaListIDDictionary.size(); i++) {
+			if (NodeList[betaListIDDictionary[i]]->justCondition == expression) {
+				return NodeList[betaListIDDictionary[i]];
+			}
+		}
 	}
 	return nullptr;
 }

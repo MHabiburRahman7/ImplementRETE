@@ -34,6 +34,7 @@ public:
 
 	static Node* findAlphaNode(string dataType);
 	static Node* findBetaNode(string product);
+	static Node* findNode(string expression, int = -1);
 
 	//About Working Memory
 	static void createWMSet(vector<string> inputName);
