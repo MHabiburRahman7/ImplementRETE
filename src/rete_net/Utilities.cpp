@@ -197,15 +197,34 @@ vector<pair<string, string>> Utilities::tokenizeMoreDetail(string temp)
 	}
 	//FROM
 	else if (itt == 0 && strcmp(ToUpper(token).c_str(), "FROM") == 0) {
-		token = strtok(NULL, " ");
-		conditionMade.push_back({ "Beta", token });
+		token = strtok(NULL, ", ");
+		while (token != NULL) {
+			conditionMade.push_back({ "Beta", token });
+			token = strtok(NULL, ", ");
+		}
 		//return conditionMade;
 	}
 	//THEN
 	else if (itt == 0 && strcmp(ToUpper(token).c_str(), "THEN") == 0) {
-		token = strtok(NULL, " ");
-		conditionMade.push_back({ "Term", token });
+		//token = strtok(NULL, " ");
+		token = strtok(NULL, ", ");
+		while (token != NULL) {
+			conditionMade.push_back({ "Term", token });
+			token = strtok(NULL, ", ");
+		}
+		//conditionMade.push_back({ "Term", token });
 		//return conditionMade;
+	}
+	else if (itt == 0 && strcmp(ToUpper(token).c_str(), "WINDOW") == 0) {
+
+		/*int len = temp.find("=");
+		int slid = temp.find()*/
+		
+		token = strtok(NULL, ",");
+		while (token != NULL) {
+			conditionMade.push_back({ "Window", token });
+			token = strtok(NULL, ",");
+		}
 	}
 	else {
 		string otherForm = token;

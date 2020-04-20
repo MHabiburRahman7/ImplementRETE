@@ -26,12 +26,19 @@ void ExecuteScheduler::initialize() {
 
 void ExecuteScheduler::buildGraph() {
 	TopoGraph::setEventFilter(ProcessRegister::eventProcess);//add Event Filter processing
+
+	NewReteGraph::createWMSet();
+
 	for (Process* p : ProcessRegister::getAllEventCapture()) {//add Event Capture
 		TopoGraph::addProcessUnitToGraph(p);
+		//connect RETE
+		TopoGraph::addRETEProcessUnitToGraph(p);
 	}
 
 	for (Process* p : ProcessRegister::getAllCQ()) {//add CQ
 		TopoGraph::addProcessUnitToGraph(p);
+		//connect RETE
+		TopoGraph::addRETEProcessUnitToGraph(p);
 	}
 
 	for (Process* p: ProcessRegister::getCEPs()) {//add CEP
@@ -39,11 +46,6 @@ void ExecuteScheduler::buildGraph() {
 	}
 
 	//NewReteGraph::createWMSet({ "targetData" });
-	NewReteGraph::createWMSet();
-
-	for (Process* p : ProcessRegister::getAllCQ()) {//add CQ
-		TopoGraph::addRETEProcessUnitToGraph(p);
-	}
 
 	//TopoGraph::addRETEProcessUnitToGraph(); //Register WMSet as the next output of EventProcess
 

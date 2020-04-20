@@ -84,6 +84,19 @@ queue<EventPtr>* AlphaNode::getEvRes()
 	return EventResult;
 }
 
+void AlphaNode::setWindow(int len, int slide)
+{
+	winLen = len;
+	winSlide = slide;
+}
+
+void AlphaNode::refreshEvent(queue<EventPtr> &eventQueue){
+	long long curr = Utils::getTime();
+	while (!eventQueue.empty() && eventQueue.front()->getTime() + winLen < curr) {
+		eventQueue.pop();
+	}
+}
+
 int AlphaNode::checkExistPair(Node* pairs)
 {
 	for (int i = 0; i < listOfBetaPairsInNode.size(); i++) {
@@ -176,6 +189,10 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 	ClearResults();
 	queue<EventPtr> inputQueue_local = *inputQueue;
 	//auto itt_local = inputQueue_local.front();
+
+	if (winLen > 0 && winSlide > 0) {
+		refreshEvent(inputQueue_local);
+	}
 	
 	float limit = atof(thisVarLimit.c_str());
 
@@ -194,8 +211,14 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 			if (thisVarLimit == "All") {
 				EventResult->push(originalFrontEvent);
 			}
-			else if (thisDataType == "exist") {
-				EventResult->push(originalFrontEvent);
+			//else if (cases == 0 && thisDataType == "exist" && Utilities::ToUpper(thisDataType) == Utilities::ToUpper(thisVarLimit)) {
+			else if (cases == 0 && thisDataType == "exist" && wmNumber == thisVarLimit) {
+				if (winLen > 0 && winSlide > 0) {
+					long long curr = Utils::getTime();
+					if (originalFrontEvent->getTime() + winLen < curr)
+						EventResult->push(originalFrontEvent);
+				}else
+					EventResult->push(originalFrontEvent);
 			}
 			else if (cases == 0 && originalFrontEvent->getString(thisDataType) == thisVarLimit) {
 				//testRes.push_back(test_cases[i]);

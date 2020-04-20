@@ -6,21 +6,19 @@
 #include <cstdlib>
 
 #include "../execution/EventProcess.h"
+#include "../op/win/NaiveTimeSlidingWindow.h"
+#include "../op/win/Window.h"
+
+#include "../util/Utils.h"
 
 class AlphaNode : public Node
 {
 public:
-	//Test Result
-	//vector<pair<int, int>> testRes;
-
 	//Starter kit
 	int getID();
 	string getType();
 	//AlphaNode();
 	AlphaNode(int id, string condition, string wmNum);
-	
-	//int BaseNodeID; // unused
-	//string tempComingCondition; //unused
 
 	//Lets connect it
 	int checkExistPair(Node* pairs);
@@ -29,8 +27,6 @@ public:
 	//Test
 	void testAlphaAndSaveHere(vector<pair<int, int>> test_cases);
 	bool testDataType(string condition);
-	//int testSingleInAlpha(pair<int, int> test_case);
-	//vector<pair<int, int>> testAlphaNode(vector<pair<int, int>> test_cases);
 
 	//Initialization
 	int ResetNode();
@@ -50,6 +46,9 @@ public:
 
 	queue<EventPtr>* getEvRes();
 
+	void setWindow(int len, int slide);
+	void refreshEvent(queue<EventPtr> &eventQueue);
+
 private:
 	int id;
 	string wmNumber;
@@ -62,5 +61,10 @@ private:
 
 	//Connected Node (I am not sure with this)
 	vector<Node*> listOfBetaPairsInNode;
+
+	//windows thing
+	vector<Window*> windowList;
+	int winLen = -1;
+	int winSlide = -1;
 };
 

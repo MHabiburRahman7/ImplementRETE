@@ -305,19 +305,38 @@ void NewReteGraph::parseConditionOriginal(list<string> condList)
 	//Rebuild the tokenized
 	vector<Node*> tempBuildNode;
 	vector<string> andOrCondition;
+
+	//get winLen and winSlide
+	int start, m_winLen = -1, m_winSliding = -1;
+	if (collectedMade.size() > 3) {
+		start = collectedMade[2][0].second.find("=");
+		m_winLen = atoi(collectedMade[2][0].second.substr(start + 1, collectedMade[2][0].second.length() - start + 1).c_str());
+
+		start = collectedMade[2][1].second.find("=");
+		m_winSliding = atoi(collectedMade[2][1].second.substr(start + 1, collectedMade[2][1].second.length() - start + 1).c_str());
+
+		//int c = 0;
+	}
+
+	//1st iteration, build the available alpha
 	for (int i = 0; i < collectedMade[0].size(); i++) {
 		Node* tempSingleNode;
 
 		if (collectedMade[0][i].first == "Alpha") {
 			//check if similar alpha node is exist
-			if (tempSingleNode = findNode(collectedMade[0][i].second, 0)) {
-				tempBuildNode.push_back(tempSingleNode);
-			}
-			//else
-			else {
+			//if (tempSingleNode = findNode(collectedMade[0][i].second, 0)) {
+			//	tempBuildNode.push_back(tempSingleNode);
+			//}
+			////else
+			//else {
 				tempSingleNode = addAlphaReturnNode(collectedMade[0][i].second, collectedMade[1][0].second);
 				tempBuildNode.push_back(tempSingleNode);
-			}
+
+				if (m_winLen > 0 && m_winSliding > 0) {
+					static_cast<AlphaNode*>(tempSingleNode)->setWindow(m_winLen, m_winSliding);
+				}
+			//}
+
 		}
 		else if (collectedMade[0][i].first == "condition") {
 			andOrCondition.push_back(collectedMade[0][i].second);
@@ -364,7 +383,7 @@ void NewReteGraph::parseConditionOriginal(list<string> condList)
 		}
 		else {
 			break;
-		}
+		}		
 	}
 
 	//From only contain 1 source
@@ -387,6 +406,7 @@ void NewReteGraph::parseConditionOriginal(list<string> condList)
 		
 		//if i = 1 -> window clause :v --> this is idk
 		//if it is window clause
+
 	}
 	
 }
@@ -435,7 +455,7 @@ void NewReteGraph::connectNodes(Node& n1, Node& n2, Node& n3)
 
 void NewReteGraph::processRete(int timeSlice)
 {
-	if (m_WMSet.getWMInputQueue()[0]->empty())
+	if (m_WMSet.getWMInputQueue().size() < 1)
 		return;
 
 	vector<pair<Node*, int>> visitedMark;
@@ -448,11 +468,10 @@ void NewReteGraph::processRete(int timeSlice)
 
 		//test on alpha
 		for (int i = 0; i < getWMInputQueue().size(); i++) {
-			
-			if(static_cast<AlphaNode*>(NodeList[alphaListIDDictionary[j]])->getWmName() 
+
+			if (static_cast<AlphaNode*>(NodeList[alphaListIDDictionary[j]])->getWmName()
 				== m_WMSet.getSingleInputQueueName(i))
 				static_cast<AlphaNode*>(NodeList[alphaListIDDictionary[j]])->testAlphaAndSaveHere(m_WMSet.getWMInputQueue()[0], timeSlice);
-		}
 
 			//activate the beta
 			//searching all pair and push it
@@ -471,7 +490,7 @@ void NewReteGraph::processRete(int timeSlice)
 					visitedMark.push_back({ static_cast<AlphaNode*>(NodeList[alphaListIDDictionary[j]])->getSinglePair(k), 0 });
 				}
 			}
-
+		}
 			//break;
 	}
 
@@ -570,11 +589,18 @@ void NewReteGraph::createWMSet(vector<string> inputName)
 
 void NewReteGraph::createWMSet()
 {
-	for (int i = 0; i < cqOutputList.size(); i++) {
-		for(int j=0; j<cepFromList.size(); j++){
-			if (cqOutputList[i] == cepFromList[j]) {
-				m_WMSet.createInputQueue(cqOutputList[i]);
-				addAlphaReturnNode(cqOutputList[i] + " == All", cqOutputList[i]);
+	for (int i = 0; i < cepFromList.size(); i++) {
+		for (int j = 0; j < cqOutputList.size(); j++) {
+			if (cqOutputList[j] == cepFromList[i]) {
+				m_WMSet.createInputQueue(cqOutputList[j]);
+				addAlphaReturnNode(cqOutputList[j] + " == All", cqOutputList[j]);
+			}
+		}
+		
+		for (int j = 0; j < ecOutputList.size(); j++) {
+			if (ecOutputList[j] == cepFromList[i]) {
+				m_WMSet.createInputQueue(ecOutputList[j]);
+				addAlphaReturnNode(ecOutputList[j] + " == All", ecOutputList[j]);
 			}
 		}
 	}
@@ -632,13 +658,11 @@ void NewReteGraph::regisEcOutput(list<string> input)
 	newInputForm[0] = temp;
 
 	char* str = (char*)malloc(500);
-	//tok
 	//strcpy(str, temp.c_str());
 	for (int i = 0; i < newInputForm.size(); i++) {
 		strcpy(str, newInputForm[i].c_str());
 		str = strtok(str, " ");
 		if (Utilities::ToUpper(str) == "THEN") {
-			//str = strtok(NULL, " ");
 			ecOutputList.push_back(strtok(NULL, " "));
 		}
 	}
@@ -701,10 +725,16 @@ void NewReteGraph::regisCEPInput(list<string> input)
 	//strcpy(str, temp.c_str());
 	for (int i = 0; i < newInputForm.size(); i++) {
 		strcpy(str, newInputForm[i].c_str());
-		str = strtok(str, " ");
+		char* token = strtok(str, " ");
 		//str = strtok(str, " ");
-		if (Utilities::ToUpper(str) == "FROM")
-			cepFromList.push_back(strtok(NULL, " "));
+		if (Utilities::ToUpper(str) == "FROM") {
+			token = strtok(NULL, ", ");
+			while (token != NULL) {
+				cepFromList.push_back(token);
+				token = strtok(NULL, ", ");
+			}
+		}
+			//cepFromList.push_back(strtok(NULL, " "));
 	}
 }
 
