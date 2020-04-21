@@ -231,6 +231,12 @@ int BetaNode::processBetaNode(int timeSlice)
 		}
 	}
 	
+	for (int i = 0; i < EventResult->size(); i++) {
+		//cout << "CEP - beta[ " << thisProduct << " ]" << EventResult[i].front() << endl;
+		cout << endl << "CEP - beta[" << thisProduct << "]; time: " << Utilities::getTime() << endl;
+	}
+	//if(EventResult->size() > 0){}
+
 	return 0;
 }
 

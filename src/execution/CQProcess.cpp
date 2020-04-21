@@ -99,8 +99,8 @@ bool CQProcess::process(int timeSlice){
 							throw "no such an operator.";
 						}
 					}
-
-					cout <<endl << "CQ[" << outputStreamName << "] " << *currEvent << endl;
+					//---------------------------dont forget -------------------------------------
+					//cout <<endl << "CQ[" << outputStreamName << "] " << *currEvent << endl;
 					for (queue<EventPtr>* outputQueue : inputQueueSetOfDownstreamProcessUnit) {
 						outputQueue->push(currEvent);
 					}
@@ -153,7 +153,8 @@ void CQProcess::triggerResult() {
 						Event* e = new Event(Utils::id++, Utils::getTime());
 						e->addAttr("name", currProcess->outputStreamName);
 						EventPtr ep(e);
-						cout << "CQ[" << currProcess->outputStreamName << "] " << *ep << endl;
+						//-------------------------------------dont forget -----------------------------------------------
+						//cout << "CQ[" << currProcess->outputStreamName << "] " << *ep << endl;
 						for (queue<EventPtr>* outputQueue : currProcess->inputQueueSetOfDownstreamProcessUnit) {
 							outputQueue->push(ep);
 						}
@@ -207,7 +208,9 @@ void CQProcess::triggerResult() {
 						//如果newAttrNames和operatorNames都为空，就time和output stream name
 
 						currEvent->addAttr("name", currProcess->outputStreamName);
-						cout << "CQ[" << currProcess->outputStreamName << "]; " << *currEvent << endl;
+
+						//-------------------------------------dont forget -----------------------------------------------
+						//cout << "CQ[" << currProcess->outputStreamName << "]; " << *currEvent << endl;
 						for (queue<EventPtr>* outputQueue : currProcess->inputQueueSetOfDownstreamProcessUnit) {
 							outputQueue->push(currEvent);
 						}

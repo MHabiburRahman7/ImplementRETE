@@ -8,6 +8,7 @@
 #include "../execution/EventProcess.h"
 #include "../op/win/NaiveTimeSlidingWindow.h"
 #include "../op/win/Window.h"
+#include "../op/ExistOp.h"
 
 #include "../util/Utils.h"
 
@@ -49,6 +50,8 @@ public:
 	void setWindow(int len, int slide);
 	void refreshEvent(queue<EventPtr> &eventQueue);
 
+	void setWindowLiyang(int len, int slide);
+
 private:
 	int id;
 	string wmNumber;
@@ -59,11 +62,13 @@ private:
 	string thisCondition;
 	string thisVarLimit;
 
+	string additionalStr;
+
 	//Connected Node (I am not sure with this)
 	vector<Node*> listOfBetaPairsInNode;
 
 	//windows thing
-	vector<Window*> windowList;
+	vector<Window*> alphaWindowList;
 	int winLen = -1;
 	int winSlide = -1;
 };

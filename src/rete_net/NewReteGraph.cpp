@@ -334,6 +334,7 @@ void NewReteGraph::parseConditionOriginal(list<string> condList)
 
 				if (m_winLen > 0 && m_winSliding > 0) {
 					static_cast<AlphaNode*>(tempSingleNode)->setWindow(m_winLen, m_winSliding);
+					//static_cast<AlphaNode*>(tempSingleNode)->setWindowLiyang(m_winLen, m_winSliding);
 				}
 			//}
 

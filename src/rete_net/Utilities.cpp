@@ -235,6 +235,13 @@ vector<pair<string, string>> Utilities::tokenizeMoreDetail(string temp)
 	return conditionMade;
 }
 
+long long Utilities::getTime()
+{
+	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+		std::chrono::system_clock::now().time_since_epoch());
+	return ms.count();
+}
+
 string Utilities::ToUpper(string ori)
 {
 	for (int i = 0; i < ori.size(); i++) {
