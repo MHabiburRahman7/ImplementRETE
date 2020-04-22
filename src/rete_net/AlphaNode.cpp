@@ -104,6 +104,9 @@ void AlphaNode::setWindow(int len, int slide)
 {
 	winLen = len;
 	winSlide = slide;
+
+	nextTime = Utilities::getTime();
+	nextTime += winSlide;
 }
 
 void AlphaNode::refreshEvent(queue<EventPtr> &eventQueue){
@@ -230,44 +233,28 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 	ClearResults();
 	queue<EventPtr> inputQueue_local = *inputQueue;
 	//auto itt_local = inputQueue_local.front();
-
+	
+	int timeSlice_i = TimeSlice;
 	bool isAbleToProcess = false;
 
+	//if there is a window involved
 	if (winLen > 0 && winSlide > 0) {
+		long long now = Utilities::getTime();
+		if (now < nextTime)
+				return;
+		
+		nextTime = now + winSlide;
 		refreshEvent(inputQueue_local);
+		refreshEvent(*inputQueue);
 	}
 	
 	float limit = atof(thisVarLimit.c_str());
 
-	if (limit == 0) {//its not a integer val
-		int cases = -1;
-		if (thisCondition == "=" || thisCondition == "==")
-			cases = 0;
-		else if (thisCondition == "!=")
-			cases = 1;
-
-		int timeSlice_i = TimeSlice;
+	if (Utilities::ToUpper(thisDataType) == "EXIST") {
 		while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
-			//EventPtr originalFrontEvent = inputQueue_local->front();
 			EventPtr originalFrontEvent = inputQueue_local.front();
-
-			if (thisVarLimit == "All") {
-				EventResult->push(originalFrontEvent);
-			}
-			//else if (cases == 0 && thisDataType == "exist" && Utilities::ToUpper(thisDataType) == Utilities::ToUpper(thisVarLimit)) {
-			else if (cases == 0 && thisDataType == "exist" && wmNumber == thisVarLimit) {
-				if (winLen > 0 && winSlide > 0) {
-					long long curr = Utils::getTime();
-					if (originalFrontEvent->getTime() + winLen < curr)
-						EventResult->push(originalFrontEvent);
-				}else
-					EventResult->push(originalFrontEvent);
-			}
-			else if (cases == 0 && originalFrontEvent->getString(thisDataType) == thisVarLimit) {
-				//testRes.push_back(test_cases[i]);
-				EventResult->push(originalFrontEvent);
-			}
-			else if (cases == 1 && originalFrontEvent->getString(thisDataType) != thisVarLimit) {
+			
+			if (wmNumber == thisVarLimit) {
 				EventResult->push(originalFrontEvent);
 			}
 
@@ -276,29 +263,12 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 			timeSlice_i--;
 		}
 	}
-	else {
-		int cases = -1;
-		// 0 -> equal less
-		// 1 -> equal more
-		// 2 -> less
-		// 3 -> more
-		if (thisCondition == "<=")
-			cases = 0;
-		else if (thisCondition == ">=")
-			cases = 1;
-		else if (thisCondition == "<")
-			cases = 2;
-		else if (thisCondition == ">")
-			cases = 3;
-		else if (thisCondition == "==")
-			cases = 4;
-		
-		if (Utilities::ToUpper(thisDataType) == "COUNT") {
-			int timeSlice_i = TimeSlice;
-			if (cases == 0) {
-				while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
-					EventPtr originalFrontEvent = inputQueue_local.front();
+	else if (Utilities::ToUpper(thisDataType) == "COUNT") {
+		while (!inputQueue_local.empty() && timeSlice_i > 0) {
+			EventPtr originalFrontEvent = inputQueue_local.front();
 
+			if (thisCondition == "<=") {
+				while (!inputQueue_local.empty() && timeSlice_i > 0) {
 					if (inputQueue_local.size() <= limit)
 						EventResult->push(originalFrontEvent);
 
@@ -306,10 +276,8 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 					inputQueue_local.pop();
 				}
 			}
-			else if (cases == 1) {
-				while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
-					EventPtr originalFrontEvent = inputQueue_local.front();
-
+			else if (thisCondition == ">=") {
+				while (!inputQueue_local.empty() && timeSlice_i > 0) {
 					if (inputQueue_local.size() >= limit)
 						EventResult->push(originalFrontEvent);
 
@@ -317,10 +285,8 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 					inputQueue_local.pop();
 				}
 			}
-			else if (cases == 2) {
-				while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
-					EventPtr originalFrontEvent = inputQueue_local.front();
-
+			else if (thisCondition == "<") {
+				while (!inputQueue_local.empty() && timeSlice_i > 0) {
 					if (inputQueue_local.size() < limit)
 						EventResult->push(originalFrontEvent);
 
@@ -328,21 +294,17 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 					inputQueue_local.pop();
 				}
 			}
-			else if (cases == 3) {
-				while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
-					EventPtr originalFrontEvent = inputQueue_local.front();
-					
-					if(inputQueue_local.size() > limit)
+			else if (thisCondition == ">") {
+				while (!inputQueue_local.empty() && timeSlice_i > 0) {
+					if (inputQueue_local.size() > limit)
 						EventResult->push(originalFrontEvent);
-					
+
 					timeSlice_i--;
 					inputQueue_local.pop();
 				}
 			}
-			else if (cases == 4) {
-				while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
-					EventPtr originalFrontEvent = inputQueue_local.front();
-
+			else if (thisCondition == "==") {
+				while (!inputQueue_local.empty() && timeSlice_i > 0) {
 					if (inputQueue_local.size() == limit)
 						EventResult->push(originalFrontEvent);
 
@@ -351,31 +313,176 @@ void AlphaNode::testAlphaAndSaveHere(queue<EventPtr>* inputQueue, int TimeSlice)
 				}
 			}
 		}
+	}
+	else {
+		//non integer val
+		if (limit == 0) {
+			while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
 
-		int timeSlice_i = TimeSlice;
-		while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
-			EventPtr originalFrontEvent = inputQueue_local.front();
+				EventPtr originalFrontEvent = inputQueue_local.front();
+				if (thisVarLimit == "All") {
+					EventResult->push(originalFrontEvent);
+				}
+				else if ((thisCondition == "==" || thisCondition == "=") 
+					&& originalFrontEvent->getString(thisDataType) == thisVarLimit) {
+					//testRes.push_back(test_cases[i]);
+					EventResult->push(originalFrontEvent);
+				}
+				else if (thisCondition == "!=" 
+					&& originalFrontEvent->getString(thisDataType) != thisVarLimit) {
+					EventResult->push(originalFrontEvent);
+				}
 
-			if (cases == 0 && originalFrontEvent->getFloat(thisDataType) <= limit) {
-				EventResult->push(originalFrontEvent);
+				inputQueue_local.pop();
+				//itt_local+=1;
+				timeSlice_i--;
 			}
-			else if (cases == 1 && originalFrontEvent->getFloat(thisDataType) >= limit) {
-				EventResult->push(originalFrontEvent);
-			}
-			else if (cases == 2 && originalFrontEvent->getFloat(thisDataType) < limit) {
-				EventResult->push(originalFrontEvent);
-			}
-			else if (cases == 3 && originalFrontEvent->getFloat(thisDataType) > limit) {
-				EventResult->push(originalFrontEvent);
-			}
-			else if (cases == 4 && originalFrontEvent->getFloat(thisDataType) == limit) {
-				EventResult->push(originalFrontEvent);
-			}
+		}
+		else {
 
-			inputQueue_local.pop();
-			timeSlice_i--;
+			while (!inputQueue_local.empty() && timeSlice_i > 0) {
+			//looks like doesn't need
+			}
 		}
 	}
+
+	//if (limit == 0) {//its not a integer val
+	//	int cases = -1;
+	//	if (thisCondition == "=" || thisCondition == "==")
+	//		cases = 0;
+	//	else if (thisCondition == "!=")
+	//		cases = 1;
+	//
+	//	int timeSlice_i = TimeSlice;
+	//	while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
+	//		//EventPtr originalFrontEvent = inputQueue_local->front();
+	//		EventPtr originalFrontEvent = inputQueue_local.front();
+	//
+	//		if (thisVarLimit == "All") {
+	//			EventResult->push(originalFrontEvent);
+	//		}
+	//		//else if (cases == 0 && thisDataType == "exist" && Utilities::ToUpper(thisDataType) == Utilities::ToUpper(thisVarLimit)) {
+	//		else if (cases == 0 && thisDataType == "exist" && wmNumber == thisVarLimit) {
+	//			if (winLen > 0 && winSlide > 0) {
+	//				long long curr = Utils::getTime();
+	//				if (originalFrontEvent->getTime() + winLen < curr)
+	//					EventResult->push(originalFrontEvent);
+	//			}else
+	//				EventResult->push(originalFrontEvent);
+	//		}
+	//		else if (cases == 0 && originalFrontEvent->getString(thisDataType) == thisVarLimit) {
+	//			//testRes.push_back(test_cases[i]);
+	//			EventResult->push(originalFrontEvent);
+	//		}
+	//		else if (cases == 1 && originalFrontEvent->getString(thisDataType) != thisVarLimit) {
+	//			EventResult->push(originalFrontEvent);
+	//		}
+	//
+	//		inputQueue_local.pop();
+	//		//itt_local+=1;
+	//		timeSlice_i--;
+	//	}
+	//}
+	//else {
+	//	int cases = -1;
+	//	// 0 -> equal less
+	//	// 1 -> equal more
+	//	// 2 -> less
+	//	// 3 -> more
+	//	if (thisCondition == "<=")
+	//		cases = 0;
+	//	else if (thisCondition == ">=")
+	//		cases = 1;
+	//	else if (thisCondition == "<")
+	//		cases = 2;
+	//	else if (thisCondition == ">")
+	//		cases = 3;
+	//	else if (thisCondition == "==")
+	//		cases = 4;
+	//	
+	//	if (Utilities::ToUpper(thisDataType) == "COUNT") {
+	//		int timeSlice_i = TimeSlice;
+	//		if (cases == 0) {
+	//			while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
+	//				EventPtr originalFrontEvent = inputQueue_local.front();
+	//
+	//				if (inputQueue_local.size() <= limit)
+	//					EventResult->push(originalFrontEvent);
+	//
+	//				timeSlice_i--;
+	//				inputQueue_local.pop();
+	//			}
+	//		}
+	//		else if (cases == 1) {
+	//			while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
+	//				EventPtr originalFrontEvent = inputQueue_local.front();
+	//
+	//				if (inputQueue_local.size() >= limit)
+	//					EventResult->push(originalFrontEvent);
+	//
+	//				timeSlice_i--;
+	//				inputQueue_local.pop();
+	//			}
+	//		}
+	//		else if (cases == 2) {
+	//			while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
+	//				EventPtr originalFrontEvent = inputQueue_local.front();
+	//
+	//				if (inputQueue_local.size() < limit)
+	//					EventResult->push(originalFrontEvent);
+	//
+	//				timeSlice_i--;
+	//				inputQueue_local.pop();
+	//			}
+	//		}
+	//		else if (cases == 3) {
+	//			while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
+	//				EventPtr originalFrontEvent = inputQueue_local.front();
+	//				
+	//				if(inputQueue_local.size() > limit)
+	//					EventResult->push(originalFrontEvent);
+	//				
+	//				timeSlice_i--;
+	//				inputQueue_local.pop();
+	//			}
+	//		}
+	//		else if (cases == 4) {
+	//			while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
+	//				EventPtr originalFrontEvent = inputQueue_local.front();
+	//
+	//				if (inputQueue_local.size() == limit)
+	//					EventResult->push(originalFrontEvent);
+	//
+	//				timeSlice_i--;
+	//				inputQueue_local.pop();
+	//			}
+	//		}
+	//	}
+	//
+	//	int timeSlice_i = TimeSlice;
+	//	while (!inputQueue_local.empty() && timeSlice_i > 0) {//current input queue is not empty.
+	//		EventPtr originalFrontEvent = inputQueue_local.front();
+	//
+	//		if (cases == 0 && originalFrontEvent->getFloat(thisDataType) <= limit) {
+	//			EventResult->push(originalFrontEvent);
+	//		}
+	//		else if (cases == 1 && originalFrontEvent->getFloat(thisDataType) >= limit) {
+	//			EventResult->push(originalFrontEvent);
+	//		}
+	//		else if (cases == 2 && originalFrontEvent->getFloat(thisDataType) < limit) {
+	//			EventResult->push(originalFrontEvent);
+	//		}
+	//		else if (cases == 3 && originalFrontEvent->getFloat(thisDataType) > limit) {
+	//			EventResult->push(originalFrontEvent);
+	//		}
+	//		else if (cases == 4 && originalFrontEvent->getFloat(thisDataType) == limit) {
+	//			EventResult->push(originalFrontEvent);
+	//		}
+	//
+	//		inputQueue_local.pop();
+	//		timeSlice_i--;
+	//	}
+	//}
 }
 
 bool AlphaNode::isEmptyResult()

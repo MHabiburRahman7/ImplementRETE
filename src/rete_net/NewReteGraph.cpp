@@ -495,8 +495,9 @@ void NewReteGraph::processRete(int timeSlice)
 			//break;
 	}
 
-	//vector<int> possible_match = {};
-
+	//Clear WMInputQueue
+	//m_WMSet.clearSet();
+	
 	//BFS based on Queue
 	while (!pushedBeta.empty()) {
 		if (!static_cast<BetaNode*>( static_cast<BetaNode*>(pushedBeta[0])->getLeftConnNode())->isEmptyResult()
@@ -737,6 +738,10 @@ void NewReteGraph::regisCEPInput(list<string> input)
 		}
 			//cepFromList.push_back(strtok(NULL, " "));
 	}
+}
+
+void NewReteGraph::initiateTime()
+{
 }
 
 

@@ -9,6 +9,7 @@ public:
 		for (EventPtr ePtr : eventVec) {
 			string streamName = ePtr->getDestination();
 			cout << endl << "CEP["<< streamName << "]; time: " << Utils::getTime() << endl;
+			cout << "Event: " << *ePtr << endl;
 		}
 	}
 

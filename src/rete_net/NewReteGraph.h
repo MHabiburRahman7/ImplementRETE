@@ -51,6 +51,8 @@ public:
 	static void regisCqOutput(list<string> input);
 	static void regisCEPInput(list<string> input);
 
+	static void initiateTime();
+
 private:
 	static vector<string> cqOutputList, cepFromList, ecOutputList;
 	static WMSet m_WMSet;
