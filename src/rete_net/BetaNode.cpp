@@ -231,14 +231,16 @@ int BetaNode::processBetaNode(int timeSlice)
 		}
 	}
 	
+	if (EventResult->size() > 0)
+		cout << "------------- FROM BETA NODE ---------------" << endl;
 	queue<EventPtr> local_eventResult = *EventResult;
-	for (;local_eventResult.size() > 0; local_eventResult.pop()) {
+	//for (;local_eventResult.size() > 0; local_eventResult.pop()) {
 		//cout << "CEP - beta[ " << thisProduct << " ]" << EventResult[i].front() << endl;
 		//cout << endl << "CEP - beta[" << thisProduct << "]; event id: " << local_eventResult.front()->getId() << endl;
 		cout << endl << "CEP - beta[" << thisProduct << "]; event id: " << *local_eventResult.front() << endl;
-	}
+	//}
 	if (EventResult->size() > 0)
-		cout << "---------------------------------------" << endl;
+		cout << "--------------------------------------------" << endl;
 	//if(EventResult->size() > 0){}
 
 	return 0;

@@ -23,7 +23,6 @@ public:
 
 	static void buildNetNode();
 
-	static void parseCondition(list<string> conditionList);
 	static void parseConditionOriginal(list<string> condList);
 
 	static void connectNodes(Node& n1, Node& n2, Node& n3);
@@ -50,8 +49,6 @@ public:
 	static void regisEcOutput(list<string> input);
 	static void regisCqOutput(list<string> input);
 	static void regisCEPInput(list<string> input);
-
-	static void initiateTime();
 
 private:
 	static vector<string> cqOutputList, cepFromList, ecOutputList;

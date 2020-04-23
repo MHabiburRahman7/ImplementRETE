@@ -72,6 +72,5 @@ private:
 	int winLen = -1;
 	int winSlide = -1;
 	long long nextTime = -1;
-	bool initiated = false;
 };
 

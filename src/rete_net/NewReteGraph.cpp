@@ -68,8 +68,9 @@ Node* NewReteGraph::addAlphaReturnNode(string condition, string wmSource)
 
 	//duplicate check
 	for (int i = 0; i < alphaListIDDictionary.size(); i++) {
-		if (NodeList[alphaListIDDictionary[i]]->justCondition == condition)
-			return nullptr;
+		if (NodeList[alphaListIDDictionary[i]]->justCondition == condition
+			&& dynamic_cast<AlphaNode*>(NodeList[alphaListIDDictionary[i]])->getWmName() == wmSource)
+			return NodeList[alphaListIDDictionary[i]];
 	}
 
 	//Try to use OOP
@@ -92,7 +93,7 @@ Node* NewReteGraph::addBetaReturnNode(string condition)
 	//duplicate check
 	for (int i = 0; i < betaListIDDictionary.size(); i++) {
 		if (NodeList[betaListIDDictionary[i]]->justCondition == condition)
-			return nullptr;
+			return NodeList[betaListIDDictionary[i]];
 	}
 
 	//Try to use OOP
@@ -175,100 +176,6 @@ void NewReteGraph::buildNetNode()
 		else
 			continue;
 	}
-}
-
-void NewReteGraph::parseCondition(list<string> conditionList)
-{
-	//Parsing parsing~
-	vector<vector<pair<string, string>>> collectedMade;
-	vector<string> newInputForm;
-
-	for (auto v : conditionList) {
-		newInputForm.push_back(v);
-	}
-
-	//edit & into AND
-	string temp;
-	for (auto v : newInputForm[0]) {
-		if (v == '&') {
-			temp += " AND ";
-		}
-		else {
-			temp += v;
-		}
-	}
-	newInputForm[0] = temp;
-	
-	//Tokenize to determine alpha, beta, or else
-	for (int i = 0; i < newInputForm.size();i++) {
-		vector<pair<string, string>> made = {};
-
-		made = Utilities::tokenizeMoreDetail(newInputForm[i]);
-
-		collectedMade.push_back(made);
-	}
-
-	//Rebuild the tokenized
-	for (int i = 0; i < collectedMade[0].size(); i++) {
-		if (collectedMade[0][i].first == "Alpha") {
-			//addAlphaReturnNode(collectedMade[0][i].second);
-		}
-	}
-
-	string tempProduct = "";
-	vector<string> conditionFromZero, latestBetaMade;
-	//Condition from zero means set of And, Or, sequentially from the beginning of IF
-	//latestBetaMade means, i tried to build temporary beta
-
-	for (int i = 0; i < collectedMade[0].size(); i++) {
-		string tempCondition = "";
-		tempProduct = "";
-
-		if (collectedMade[0][i].first != "condition") {
-			tempCondition += collectedMade[0][i].second + " ";
-			tempCondition += "and ";
-			tempCondition += collectedMade[1][0].second;
-
-			tempProduct += collectedMade[0][i].second.substr(0, 2);
-			tempProduct += collectedMade[1][0].second.substr(0, 2);
-
-			tempCondition = tempCondition + " then " + tempProduct;
-
-			addBetaReturnNode(tempCondition);
-
-			latestBetaMade.push_back(tempProduct);
-		}
-		else if (collectedMade[0][i].first == "condition") {
-			conditionFromZero.push_back(collectedMade[0][i].second);
-		}
-	}
-
-	//Clear the unfinished beta
-	int n = latestBetaMade.size() - 1;
-
-	for (; conditionFromZero.size() > 0;) {
-		string tempCond = "";
-		tempProduct = "";
-
-		tempCond += latestBetaMade[n] + " " + conditionFromZero[conditionFromZero.size()-1] + " ";
-		tempProduct += latestBetaMade[n].substr(0, 2);
-		latestBetaMade.pop_back();
-		//*latestBeta--;
-		n--;
-		tempCond += latestBetaMade[n] + " then ";
-		tempProduct += latestBetaMade[n].substr(0, 2);
-		latestBetaMade.pop_back();
-		n--;
-
-		tempCond += tempProduct;
-		
-		addBetaReturnNode(tempCond);
-		
-		conditionFromZero.pop_back();
-	}
-
-	//connect with terminal ._.
-	addTerminalReturnNode(tempProduct + " then " + collectedMade[collectedMade.size()-1][0].second);
 }
 
 void NewReteGraph::parseConditionOriginal(list<string> condList)
@@ -740,9 +647,6 @@ void NewReteGraph::regisCEPInput(list<string> input)
 	}
 }
 
-void NewReteGraph::initiateTime()
-{
-}
 
 
 
